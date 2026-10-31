@@ -151,6 +151,41 @@ FOREIGN KEY (room_id)
 REFERENCES Room(room_id) 
 );
 
+CREATE TABLE Activities (
+activity_id INT AUTO_INCREMENT PRIMARY KEY,
+loadslip_id INT NOT NULL,
+activity_title VARCHAR(150),
+activity_type VARCHAR(50),
+instructions TEXT,
+total_points DECIMAL(10,2),
+date_posted DATETIME,
+due_date DATETIME,
+status VARCHAR(50),
+
+FOREIGN KEY (loadslip_id)
+REFERENCES Loadslip(loadslip_id)
+);
+
+
+CREATE TABLE Scores (
+score_id INT AUTO_INCREMENT PRIMARY KEY,
+activity_id INT NOT NULL,
+student_id INT NOT NULL,
+points_earned DECIMAL(10,2),
+graded_by INT,
+remarks TEXT,
+date_graded DATETIME,
+
+FOREIGN KEY (activity_id)
+REFERENCES Activities(activity_id),
+
+FOREIGN KEY (student_id)
+REFERENCES Students(student_id),
+
+FOREIGN KEY (graded_by)
+REFERENCES Teachers(teacher_id)
+);
+
 CREATE TABLE Grade (
 grade_id INT AUTO_INCREMENT PRIMARY KEY,
 loadslip_id INT NOT NULL,
@@ -182,7 +217,7 @@ attendance_status ENUM(
 ),
 recorded_by INT,
 remarks TEXT,
- 
+
 FOREIGN KEY (loadslip_id)
 REFERENCES Loadslip(loadslip_id),
 

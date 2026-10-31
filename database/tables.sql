@@ -11,6 +11,15 @@ year_level_name VARCHAR(100) NOT NULL,
 description TEXT 
 );
 
+CREATE TABLE Semester ( 
+semester_id INT AUTO_INCREMENT PRIMARY KEY, 
+semester_name VARCHAR(100) NOT NULL, 
+academic_year VARCHAR(50) NOT NULL, 
+start_date DATE, 
+end_date DATE, 
+status VARCHAR(50) 
+);
+
 CREATE TABLE Users ( 
 user_id INT AUTO_INCREMENT PRIMARY KEY, 
 username VARCHAR(100) NOT NULL UNIQUE, 
@@ -74,3 +83,46 @@ FOREIGN KEY (department_id)
 REFERENCES Department(department_id) 
 );
 
+CREATE TABLE Subjects ( 
+subject_id INT AUTO_INCREMENT PRIMARY KEY, 
+department_id INT NOT NULL, 
+subject_code VARCHAR(50) UNIQUE, 
+subject_name VARCHAR(150), 
+description TEXT, 
+units INT, 
+
+FOREIGN KEY (department_id) 
+REFERENCES Department(department_id) 
+);
+
+CREATE TABLE Loadslip ( 
+loadslip_id INT AUTO_INCREMENT PRIMARY KEY, 
+student_id INT NOT NULL, 
+subject_id INT NOT NULL, 
+teacher_id INT NOT NULL, 
+semester_id INT NOT NULL, 
+year_level_id INT NOT NULL, 
+course_id INT NOT NULL, 
+school_year VARCHAR(50), 
+section VARCHAR(50), 
+enrollment_status VARCHAR(50), 
+date_enrolled DATE, 
+
+FOREIGN KEY (student_id) 
+REFERENCES Students(student_id), 
+
+FOREIGN KEY (subject_id) 
+REFERENCES Subjects(subject_id), 
+
+FOREIGN KEY (teacher_id) 
+REFERENCES Teachers(teacher_id), 
+
+FOREIGN KEY (semester_id) 
+REFERENCES Semester(semester_id), 
+
+FOREIGN KEY (year_level_id) 
+REFERENCES YearLevel(year_level_id), 
+
+FOREIGN KEY (course_id) 
+REFERENCES Course(course_id) 
+); 

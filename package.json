@@ -1,0 +1,32 @@
+{
+  "name": "schola-system",
+  "version": "1.0.0",
+  "description": "Recording System ",
+  "keywords": [
+    "dbms",
+    "sia",
+    "final",
+    "project"
+  ],
+  "homepage": "https://github.com/MaciasArnaldoJr/SCHOLA#readme",
+  "bugs": {
+    "url": "https://github.com/MaciasArnaldoJr/SCHOLA/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaciasArnaldoJr/SCHOLA.git"
+  },
+  "license": "ISC",
+  "author": "Macias, Marino, Malusay, Malunes, Labadia, Lumanog",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "mysql2": "^3.24.6"
+  }
+}

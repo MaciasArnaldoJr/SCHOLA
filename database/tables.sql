@@ -1,3 +1,16 @@
+CREATE TABLE Department ( 
+department_id INT AUTO_INCREMENT PRIMARY KEY, 
+department_code VARCHAR(50) NOT NULL UNIQUE, 
+department_name VARCHAR(150) NOT NULL, 
+description TEXT 
+); 
+
+CREATE TABLE YearLevel ( 
+year_level_id INT AUTO_INCREMENT PRIMARY KEY, 
+year_level_name VARCHAR(100) NOT NULL, 
+description TEXT 
+);
+
 CREATE TABLE Users ( 
 user_id INT AUTO_INCREMENT PRIMARY KEY, 
 username VARCHAR(100) NOT NULL UNIQUE, 
@@ -6,6 +19,17 @@ email VARCHAR(255) NOT NULL UNIQUE,
 role ENUM('Admin','Teacher','Student'), 
 account_status VARCHAR(50), 
 creation_date DATETIME DEFAULT CURRENT_TIMESTAMP 
+);
+
+CREATE TABLE Course ( 
+course_id INT AUTO_INCREMENT PRIMARY KEY, 
+department_id INT NOT NULL, 
+course_code VARCHAR(50) UNIQUE, 
+course_name VARCHAR(150), 
+description TEXT, 
+
+FOREIGN KEY (department_id) 
+REFERENCES Department(department_id) 
 );
 
 CREATE TABLE Students ( 

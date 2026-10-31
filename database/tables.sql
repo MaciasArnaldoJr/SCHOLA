@@ -151,6 +151,48 @@ FOREIGN KEY (room_id)
 REFERENCES Room(room_id) 
 );
 
+CREATE TABLE Grade (
+grade_id INT AUTO_INCREMENT PRIMARY KEY,
+loadslip_id INT NOT NULL,
+student_id INT NOT NULL,
+prelim_grade DECIMAL(5,2),
+midterm_grade DECIMAL(5,2),
+final_grade DECIMAL(5,2),
+overall_grade DECIMAL(5,2),
+remarks VARCHAR(200),
+date_updated DATETIME,
+
+FOREIGN KEY (loadslip_id)
+REFERENCES Loadslip(loadslip_id),
+
+FOREIGN KEY (student_id)
+REFERENCES Students(student_id)
+);
+
+CREATE TABLE Attendance (
+attendance_id INT AUTO_INCREMENT PRIMARY KEY,
+loadslip_id INT NOT NULL,
+student_id INT NOT NULL,
+attendance_date DATE,
+attendance_status ENUM(
+'Present',
+'Absent',
+'Late',
+'Excused'
+),
+recorded_by INT,
+remarks TEXT,
+ 
+FOREIGN KEY (loadslip_id)
+REFERENCES Loadslip(loadslip_id),
+
+FOREIGN KEY (student_id)
+REFERENCES Students(student_id),
+
+FOREIGN KEY (recorded_by)
+REFERENCES Teachers(teacher_id)
+);
+
 CREATE TABLE LearningMaterial ( 
 material_id INT AUTO_INCREMENT PRIMARY KEY, 
 subject_id INT NOT NULL, 

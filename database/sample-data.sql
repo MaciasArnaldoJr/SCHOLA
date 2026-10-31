@@ -64,6 +64,14 @@ VALUES
 (1, 'IT104', 'Web Development', 'Fundamentals of web development', 3),
 (1, 'IT105', 'Networking 1', 'Introduction to computer networks', 3);
 
+INSERT INTO Room (room_name, building, room_type, capacity, room_status)
+VALUES
+('Room 101', 'Main Building', 'Classroom', 40, 'Available'),
+('Room 102', 'Main Building', 'Classroom', 40, 'Available'),
+('Computer Lab 1', 'CAS Building', 'Laboratory', 30, 'Available'),
+('Speech Lab', 'CAS Building', 'Laboratory', 30, 'Available'),
+('Room 201', 'Main Building', 'Classroom', 50, 'Available');
+
 INSERT INTO Loadslip
 (student_id, subject_id, teacher_id, semester_id, year_level_id, course_id, school_year, section, enrollment_status, date_enrolled)
 VALUES
@@ -75,6 +83,18 @@ VALUES
 (3, 5, 2, 1, 3, 2, '2026-2027', 'A', 'Enrolled', '2026-08-01'),
 (4, 1, 2, 1, 1, 1, '2026-2027', 'F', 'Enrolled', '2026-08-01'),
 (4, 2, 2, 1, 1, 1, '2026-2027', 'F', 'Enrolled', '2026-08-01');
+
+INSERT INTO Schedule
+(loadslip_id, room_id, day_of_week, start_time, end_time)
+VALUES
+(1, 4, 'Monday', '08:00:00', '09:30:00'),
+(2, 1, 'Thursday', '08:00:00', '09:30:00'),
+(3, 2, 'Monday', '13:00:00', '14:30:00'),
+(4, 1, 'Thursday', '10:00:00', '11:30:00'), 
+(5, 3, 'Tuesday', '08:00:00', '09:30:00'),
+(6, 2, 'Tuesday', '13:00:00', '14:30:00'),
+(7, 4, 'Tuesday', '15:00:00', '16:30:00'), 
+(8, 3, 'Wednesday', '14:00:00', '15:30:00');
 
 INSERT INTO Activities
 (loadslip_id, activity_title, activity_type, instructions, total_points, date_posted, due_date, status)
@@ -124,3 +144,15 @@ VALUES
 (3, 2, '2026-08-08', 'Excused', 2, 'Excused absence'),
 (4, 2, '2026-08-06', 'Present', 1, 'Attended class'),
 (4, 2, '2026-08-07', 'Present', 1, 'Attended class');
+
+INSERT INTO LearningMaterial
+(subject_id, teacher_id, material_title, description, file_url, material_type, upload_date)
+VALUES
+(1, 1, 'Introduction to Computing PDF', 'Learning material for computer fundamentals.', 'uploads/computing.pdf', 'PDF', '2026-08-05 08:00:00'),
+(2, 1, 'Programming Basics', 'Introduction to programming concepts.', 'uploads/programming.pdf', 'PDF', '2026-08-06 09:00:00'),
+(3, 2, 'Database Management Notes', 'Notes about database concepts and SQL.', 'uploads/database.pdf', 'PDF', '2026-08-07 10:00:00'),
+(4, 2, 'HTML and CSS Tutorial', 'Basic web development learning material.', 'uploads/webdev.pdf', 'PDF', '2026-08-08 11:00:00'),
+(5, 2, 'Networking Fundamentals', 'Introduction to networking.', 'uploads/networking.pdf', 'PDF', '2026-08-09 13:00:00'),
+(2, 2, 'Computing Part 2 PDF', 'Learning material for computer continuation.', 'uploads/computing_part2.pdf', 'PDF', '2026-08-05 08:00:00'),
+(4, 2, 'Programming Chapter 3', 'Computer programming advanced concepts.', 'uploads/programming_Chap3.pdf', 'PDF', '2026-08-06 09:00:00'),
+(3, 2, 'Database Design PDF', 'More notes about database concepts and SQL.', 'uploads/database_design.pdf', 'PDF', '2026-08-07 10:00:00');

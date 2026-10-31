@@ -76,6 +76,31 @@ VALUES
 (4, 1, 2, 1, 1, 1, '2026-2027', 'F', 'Enrolled', '2026-08-01'),
 (4, 2, 2, 1, 1, 1, '2026-2027', 'F', 'Enrolled', '2026-08-01');
 
+INSERT INTO Activities
+(loadslip_id, activity_title, activity_type, instructions, total_points, date_posted, due_date, status)
+VALUES
+(1, 'Database Design Quiz', 'Quiz', 'Answer all questions about database design.', 50, '2026-08-05 08:00:00', '2026-08-10 23:59:00', 'Active'),
+(2, 'Web Creation Activity 1', 'Assignment', 'Create a simple website using basic programming concepts.', 100, '2026-08-06 09:00:00', '2026-08-15 23:59:00', 'Active'),
+(3, 'Networking Activity', 'Performance Task', 'Create a simple network for a student management system.', 100, '2026-08-07 10:00:00', '2026-08-20 23:59:00', 'Active'),
+(4, 'Web Development Quiz', 'Quiz', 'Answer the given web development questions.', 50, '2026-08-08 08:00:00', '2026-08-10 23:59:00', 'Active'),
+(5, 'Database Creation 1', 'Assignment', 'Create a simple ER diagram using basic database concepts.', 100, '2026-08-06 09:00:00', '2026-08-15 23:59:00', 'Active'),
+
+(6, 'Networking Activity', 'Performance Task', 'Create a functional network for a student management system.', 100, '2026-08-07 10:00:00', '2026-08-20 23:59:00', 'Active'),
+(7, 'Computation', 'Quiz', 'Answer the given computing questions.', 50, '2026-08-08 08:00:00', '2026-08-15 23:59:00', 'Active'),
+(8, 'Programming Activity 1', 'Assignment', 'Create a simple program using basic programming concepts.', 100, '2026-08-06 09:00:00', '2026-08-15 23:59:00', 'Active');
+
+INSERT INTO Scores
+(activity_id, student_id, points_earned, graded_by, remarks, date_graded)
+VALUES
+(1, 1, 45, 2, 'Very Good', '2026-08-11 09:00:00'),
+(2, 1, 90, 2, 'Excellent work', '2026-08-16 10:00:00'),
+(3, 2, 85, 2, 'Good performance', '2026-08-21 11:00:00'),
+(4, 2, 40, 2, 'Good job', '2026-08-11 09:30:00'),
+(6, 3, 48, 2, 'Excellent', '2026-08-16 10:00:00'),
+(5, 3, 48, 2, 'Excellent', '2026-08-16 10:00:00'),
+(7, 4, 48, 1, 'Excellent', '2026-08-16 10:00:00'),
+(8, 4, 48, 1, 'Excellent', '2026-08-16 10:00:00');
+
 INSERT INTO Grade
 (loadslip_id, student_id, midterm_grade, final_grade, overall_grade, remarks, date_updated)
 VALUES

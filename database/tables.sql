@@ -95,6 +95,15 @@ FOREIGN KEY (department_id)
 REFERENCES Department(department_id) 
 );
 
+CREATE TABLE Room ( 
+room_id INT AUTO_INCREMENT PRIMARY KEY, 
+room_name VARCHAR(100), 
+building VARCHAR(100), 
+room_type VARCHAR(100), 
+capacity INT, 
+room_status VARCHAR(50) 
+);
+
 CREATE TABLE Loadslip ( 
 loadslip_id INT AUTO_INCREMENT PRIMARY KEY, 
 student_id INT NOT NULL, 
@@ -126,3 +135,35 @@ REFERENCES YearLevel(year_level_id),
 FOREIGN KEY (course_id) 
 REFERENCES Course(course_id) 
 ); 
+
+CREATE TABLE Schedule ( 
+schedule_id INT AUTO_INCREMENT PRIMARY KEY, 
+loadslip_id INT NOT NULL, 
+room_id INT NOT NULL, 
+day_of_week VARCHAR(50), 
+start_time TIME, 
+end_time TIME, 
+
+FOREIGN KEY (loadslip_id) 
+REFERENCES Loadslip(loadslip_id), 
+
+FOREIGN KEY (room_id) 
+REFERENCES Room(room_id) 
+);
+
+CREATE TABLE LearningMaterial ( 
+material_id INT AUTO_INCREMENT PRIMARY KEY, 
+subject_id INT NOT NULL, 
+teacher_id INT NOT NULL, 
+material_title VARCHAR(200), 
+description TEXT, 
+file_url VARCHAR(255), 
+material_type VARCHAR(50), 
+upload_date DATETIME, 
+
+FOREIGN KEY (subject_id) 
+REFERENCES Subjects(subject_id), 
+
+FOREIGN KEY (teacher_id) 
+REFERENCES Teachers(teacher_id) 
+);

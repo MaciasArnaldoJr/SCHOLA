@@ -49,3 +49,27 @@ INSERT INTO Teachers
 VALUES
 (2, 1, 'Babie Trisha', 'Labadia', 'Calumba', 'teacher1@gmail.com', 'Programming'),
 (3, 1, 'Arnaldo Jr.', 'Macias', 'Banua', 'teacher2@gmail.com', 'Database Management');
+
+INSERT INTO Grade
+(loadslip_id, student_id, midterm_grade, final_grade, overall_grade, remarks, date_updated)
+VALUES
+(1, 1, 90.00, 94.00, 92.00, 'Passed', '2026-10-20 10:00:00'),
+(2, 1, 88.00, 92.00, 90.00, 'Passed', '2026-10-20 10:00:00'),
+(3, 2, 85.00, 90.00, 87.50, 'Passed', '2026-10-20 10:00:00'),
+(4, 2, 87.00, 91.00, 89.00, 'Passed', '2026-10-20 10:00:00'),
+(5, 3, 93.00, 96.00, 94.50, 'Passed', '2026-10-20 10:00:00'),
+(6, 3, 94.00, 94.00, 94.00, 'Passed', '2026-10-20 10:00:00'),
+(7, 4, 89.00, 92.00, 90.50, 'Passed', '2026-10-20 10:00:00'),
+(8, 4, 97.00, 98.00, 97.50, 'Passed', '2026-10-20 10:00:00');
+
+INSERT INTO Attendance
+(loadslip_id, student_id, attendance_date, attendance_status, recorded_by, remarks)
+VALUES
+(1, 1, '2026-08-05', 'Present', 2, 'Attended class'),
+(1, 1, '2026-08-06', 'Late', 2, 'Arrived 10 minutes late'),
+(2, 1, '2026-08-06', 'Present', 2, 'Attended class'),
+(2, 1, '2026-08-07', 'Absent', 2, 'No attendance'),
+(3, 2, '2026-08-05', 'Present', 2, 'Attended class'),
+(3, 2, '2026-08-08', 'Excused', 2, 'Excused absence'),
+(4, 2, '2026-08-06', 'Present', 1, 'Attended class'),
+(4, 2, '2026-08-07', 'Present', 1, 'Attended class');

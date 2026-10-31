@@ -13,6 +13,12 @@ VALUES
 ('3rd Year', 'Third year students'),
 ('4th Year', 'Fourth year students');
 
+INSERT INTO Semester (semester_name, academic_year, start_date, end_date, status)
+VALUES
+('1st Semester', '2026-2027', '2026-08-01', '2026-12-20', 'Active'),
+('2nd Semester', '2026-2027', '2027-01-05', '2027-05-30', 'Upcoming'),
+('Summer', '2026-2027', '2027-06-01', '2027-07-15', 'Upcoming');
+
 INSERT INTO Users (username, password, email, role, account_status)
 VALUES
 ('Christer John D. Lumanog', 'admin123', 'admin@gmail.com', 'Admin', 'Active'),
@@ -49,6 +55,26 @@ INSERT INTO Teachers
 VALUES
 (2, 1, 'Babie Trisha', 'Labadia', 'Calumba', 'teacher1@gmail.com', 'Programming'),
 (3, 1, 'Arnaldo Jr.', 'Macias', 'Banua', 'teacher2@gmail.com', 'Database Management');
+
+INSERT INTO Subjects (department_id, subject_code, subject_name, description, units)
+VALUES
+(1, 'CS102', 'Introduction to Computing', 'Basic concepts of computing', 3),
+(1, 'CS101', 'Computer Programming 1', 'Fundamentals of programming', 3),
+(1, 'IT103', 'Database Management System', 'Database concepts and SQL', 3),
+(1, 'IT104', 'Web Development', 'Fundamentals of web development', 3),
+(1, 'IT105', 'Networking 1', 'Introduction to computer networks', 3);
+
+INSERT INTO Loadslip
+(student_id, subject_id, teacher_id, semester_id, year_level_id, course_id, school_year, section, enrollment_status, date_enrolled)
+VALUES
+(1, 3, 1, 1, 1, 1, '2026-2027', 'C', 'Enrolled', '2026-08-01'),
+(1, 4, 1, 1, 1, 1, '2026-2027', 'C', 'Enrolled', '2026-08-01'),
+(2, 5, 1, 1, 2, 1, '2026-2027', 'B', 'Enrolled', '2026-08-01'),
+(2, 4, 1, 1, 2, 1, '2026-2027', 'B', 'Enrolled', '2026-08-01'),
+(3, 3, 2, 1, 3, 2, '2026-2027', 'A', 'Enrolled', '2026-08-01'),
+(3, 5, 2, 1, 3, 2, '2026-2027', 'A', 'Enrolled', '2026-08-01'),
+(4, 1, 2, 1, 1, 1, '2026-2027', 'F', 'Enrolled', '2026-08-01'),
+(4, 2, 2, 1, 1, 1, '2026-2027', 'F', 'Enrolled', '2026-08-01');
 
 INSERT INTO Grade
 (loadslip_id, student_id, midterm_grade, final_grade, overall_grade, remarks, date_updated)

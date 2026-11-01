@@ -43,3 +43,16 @@ exports.deleteActivity = (req, res) => {
     res.json({ message: 'Activity deleted' });
   });
 };
+
+exports.getActivityReport = (req, res) => {
+    Activity.getActivityReport((err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({
+                message: 'Failed to retrieve activity report.'
+            });
+        }
+
+        res.json(results);
+    });
+};

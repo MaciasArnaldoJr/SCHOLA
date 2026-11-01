@@ -52,4 +52,21 @@ const Activity = {
   }
 };
 
+exports.getActivityReport = (callback) => {
+    const sql = `
+        SELECT
+            a.activity_id,
+            a.activity_name,
+            a.description,
+            sc.score_id,
+            sc.score_value,
+            sc.remarks
+        FROM Activities AS a
+        INNER JOIN Scores AS sc
+            ON a.activity_id = sc.activity_id
+    `;
+
+    db.query(sql, callback);
+};
+
 module.exports = Activity;

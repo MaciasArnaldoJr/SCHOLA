@@ -47,3 +47,27 @@ exports.deleteCourse = (req, res) => {
     res.json({ message: 'Course deleted' });
   });
 };
+
+exports.getCourseReport = (req, res) => {
+  const sql = `
+    SELECT
+      c.course_id,
+      c.course_code,
+      c.course_name,
+      d.department_code,
+      d.department_name,
+      y.year_level_name,
+      COUNT(s.student_id) AS total_students
+    FROM Course AS c
+    INNER JOIN Department AS d ON c.department_id = d.department_id
+    INNER JOIN Students AS s ON c.course_id = s.course_id
+    INNER JOIN YearLevel AS y ON s.year_level_id = y.year_level_id
+    GROUP BY c.course_id, c.course_code, c.course_name,
+             d.department_code, d.department_name, y.year_level_id, y.year_level_name
+  `;
+ 
+  db.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+};

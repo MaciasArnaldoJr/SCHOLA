@@ -37,3 +37,10 @@ exports.deleteCourse = (req, res) => {
     res.json({ message: 'Course deleted' });
   });
 };
+
+exports.getCourseReport = (req, res) => {
+  Course.getReport((err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+};

@@ -37,3 +37,10 @@ exports.deleteSchedule = (req, res) => {
     res.json({ message: 'Schedule deleted' });
   });
 };
+
+exports.getScheduleReport = (req, res) => {
+  Schedule.getReport((err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+};

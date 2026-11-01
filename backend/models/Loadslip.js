@@ -60,3 +60,28 @@ exports.deleteLoadslip = (id, callback) => {
     const sql = 'DELETE FROM Loadslip WHERE loadslip_id = ?';
     db.query(sql, [id], callback);
 };
+
+exports.getLoadslipReport = (callback) => {
+    const sql = `
+        SELECT
+            l.loadslip_id,
+            l.student_id,
+            l.school_year,
+            l.section,
+            l.enrollment_status,
+            l.date_enrolled,
+            sub.subject_code,
+            sub.subject_name,
+            sub.units,
+            sem.semester_name,
+            sem.academic_year,
+            sem.status AS semester_status
+        FROM Loadslip AS l
+        INNER JOIN Subjects AS sub
+            ON l.subject_id = sub.subject_id
+        INNER JOIN Semester AS sem
+            ON l.semester_id = sem.semester_id
+    `;
+
+    db.query(sql, callback);
+};

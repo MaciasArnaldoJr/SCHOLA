@@ -5,6 +5,7 @@ const loadslipController = require('../controllers/loadslipController');
 
 router.post('/', loadslipController.createLoadslip);
 router.get('/', loadslipController.getAllLoadslips);
+router.get('/report', loadslipController.getLoadslipReport);
 router.get('/:id', loadslipController.getLoadslipById);
 router.put('/:id', loadslipController.updateLoadslip);
 router.delete('/:id', loadslipController.deleteLoadslip);

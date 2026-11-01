@@ -137,3 +137,16 @@ exports.deleteLoadslip = (req, res) => {
         });
     });
 };
+
+exports.getLoadslipReport = (req, res) => {
+    Loadslip.getLoadslipReport((err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({
+                message: 'Failed to retrieve loadslip report.'
+            });
+        }
+
+        res.json(results);
+    });
+};

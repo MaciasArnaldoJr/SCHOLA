@@ -3,6 +3,7 @@ const router = express.Router();
 const activityController = require('../controllers/activityController');
 
 router.get('/', activityController.getAllActivities);
+router.get('/report', activityController.getActivityReport);
 router.get('/:id', activityController.getActivityById);
 router.post('/', activityController.createActivity);
 router.put('/:id', activityController.updateActivity);

@@ -1,49 +1,58 @@
+
 const db = require('../database');
 
-exports.getAllLearningMaterials = (req, res) => {
-  db.query('SELECT * FROM LearningMaterial', (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(results);
-  });
+exports.getAll = (callback) => {
+  db.query('SELECT * FROM LearningMaterial', callback);
 };
 
-exports.getLearningMaterialById = (req, res) => {
-  db.query('SELECT * FROM LearningMaterial WHERE material_id = ?', [req.params.id], (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (results.length === 0) return res.status(404).json({ message: 'Learning material not found' });
-    res.json(results[0]);
-  });
+exports.getById = (id, callback) => {
+  db.query(
+    'SELECT * FROM LearningMaterial WHERE material_id = ?',
+    [id],
+    callback
+  );
 };
 
-exports.createLearningMaterial = (req, res) => {
-  const { subject_id, teacher_id, material_title, description, file_url, material_type, upload_date } = req.body;
+exports.create = (data, callback) => {
+  const {
+    subject_id,
+    teacher_id,
+    material_title,
+    description,
+    file_url,
+    material_type,
+    upload_date
+  } = data;
+
   db.query(
     'INSERT INTO LearningMaterial (subject_id, teacher_id, material_title, description, file_url, material_type, upload_date) VALUES (?, ?, ?, ?, ?, ?, ?)',
     [subject_id, teacher_id, material_title, description, file_url, material_type, upload_date],
-    (err, result) => {
-      if (err) return res.status(500).json({ error: err.message });
-      res.status(201).json({ message: 'Learning material created', material_id: result.insertId });
-    }
+    callback
   );
 };
 
-exports.updateLearningMaterial = (req, res) => {
-  const { subject_id, teacher_id, material_title, description, file_url, material_type, upload_date } = req.body;
+exports.update = (id, data, callback) => {
+  const {
+    subject_id,
+    teacher_id,
+    material_title,
+    description,
+    file_url,
+    material_type,
+    upload_date
+  } = data;
+
   db.query(
     'UPDATE LearningMaterial SET subject_id = ?, teacher_id = ?, material_title = ?, description = ?, file_url = ?, material_type = ?, upload_date = ? WHERE material_id = ?',
-    [subject_id, teacher_id, material_title, description, file_url, material_type, upload_date, req.params.id],
-    (err, result) => {
-      if (err) return res.status(500).json({ error: err.message });
-      if (result.affectedRows === 0) return res.status(404).json({ message: 'Learning material not found' });
-      res.json({ message: 'Learning material updated' });
-    }
+    [subject_id, teacher_id, material_title, description, file_url, material_type, upload_date, id],
+    callback
   );
 };
 
-exports.deleteLearningMaterial = (req, res) => {
-  db.query('DELETE FROM LearningMaterial WHERE material_id = ?', [req.params.id], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (result.affectedRows === 0) return res.status(404).json({ message: 'Learning material not found' });
-    res.json({ message: 'Learning material deleted' });
-  });
+exports.delete = (id, callback) => {
+  db.query(
+    'DELETE FROM LearningMaterial WHERE material_id = ?',
+    [id],
+    callback
+  );
 };

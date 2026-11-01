@@ -43,3 +43,16 @@ exports.deleteGrade = (req, res) => {
     res.json({ message: 'Grade deleted' });
   });
 };
+
+exports.getGradeAttendanceReport = (req, res) => {
+    Grade.getGradeAttendanceReport((err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({
+                message: 'Failed to retrieve grade and attendance report.'
+            });
+        }
+
+        res.json(results);
+    });
+};

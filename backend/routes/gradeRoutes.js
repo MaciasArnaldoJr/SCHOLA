@@ -4,6 +4,7 @@ const gradeController = require('../controllers/GradeController');
 
 router.get('/test', gradeController.test);
 router.get('/', gradeController.getAllGrades);
+router.get('/report', gradeController.getGradeAttendanceReport);
 router.get('/:id', gradeController.getGradeById);
 router.post('/', gradeController.createGrade);
 router.put('/:id', gradeController.updateGrade);

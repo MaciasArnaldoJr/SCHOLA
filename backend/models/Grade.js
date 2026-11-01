@@ -51,6 +51,26 @@ const Grade = {
     db.query('DELETE FROM Grade WHERE grade_id = ?', [id], cb);
   }
 };
- 
+
+ exports.getGradeAttendanceReport = (callback) => {
+    const sql = `
+        SELECT
+            g.grade_id,
+            g.student_id,
+            g.subject_id,
+            g.grade_value,
+            g.grade_status,
+            a.attendance_id,
+            a.attendance_date,
+            a.attendance_status
+        FROM Grade AS g
+        INNER JOIN Attendance AS a
+            ON g.student_id = a.student_id
+            AND g.subject_id = a.subject_id
+    `;
+
+    db.query(sql, callback);
+};
+
 module.exports = Grade;
  

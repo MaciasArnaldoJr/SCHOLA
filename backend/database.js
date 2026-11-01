@@ -1,4 +1,7 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({
+    path: path.join(__dirname, '..', '.env')
+});
 
 const mysql = require('mysql2');
 
@@ -11,12 +14,11 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
     if (err) {
-        console.log(err);
+        console.error('Database connection failed:', err.message);
         return;
     }
 
     console.log('Database connected!');
 });
 
-module.exports = db; 
-
+module.exports = db;

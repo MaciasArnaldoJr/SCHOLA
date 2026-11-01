@@ -110,3 +110,16 @@ exports.deleteUser = (req, res) => {
         res.json({ message: 'User deleted successfully.' });
     });
 };
+
+exports.getUserReport = (req, res) => {
+    User.getUserReport((err, results) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({
+                message: 'Failed to retrieve user report.'
+            });
+        }
+
+        res.json(results);
+    });
+};

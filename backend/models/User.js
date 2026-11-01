@@ -68,3 +68,27 @@ exports.deleteUser = (id, callback) => {
 
     db.query(sql, [id], callback);
 };
+
+exports.getUserReport = (callback) => {
+    const sql = `
+        SELECT
+            u.user_id,
+            u.username,
+            u.email,
+            u.role,
+            u.account_status,
+            s.student_id,
+            s.fname AS student_fname,
+            s.lname AS student_lname,
+            t.teacher_id,
+            t.fname AS teacher_fname,
+            t.lname AS teacher_lname
+        FROM Users AS u
+        LEFT JOIN Students AS s
+            ON u.user_id = s.user_id
+        LEFT JOIN Teachers AS t
+            ON u.user_id = t.user_id
+    `;
+
+    db.query(sql, callback);
+};

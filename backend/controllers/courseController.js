@@ -39,7 +39,7 @@ exports.deleteCourse = (req, res) => {
 };
 
 exports.getCourseReport = (req, res) => {
-  Course.getReport((err, results) => {
+  Course.getCourseReport((err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });

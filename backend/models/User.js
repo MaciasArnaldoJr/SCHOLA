@@ -92,3 +92,13 @@ exports.getUserReport = (callback) => {
 
     db.query(sql, callback);
 };
+
+exports.findForLogin = (login, callback) => {
+  const sql = `
+    SELECT user_id, username, password, email, role, account_status
+    FROM Users
+    WHERE username = ? OR email = ?
+    LIMIT 1
+  `;
+  db.query(sql, [login, login], callback);
+};

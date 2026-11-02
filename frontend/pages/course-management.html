@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCHOLA - Course Management</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="core">
+
+  <div class="topbar">
+    <h1>SCHOLA</h1>
+    <div class="nav">
+      <a href="user-management.html">Users</a>
+      <a href="course-management.html">Courses</a>
+      <a href="department-management.html">Departments</a>
+      <span id="welcome"></span>
+      <button id="logoutBtn">Log out</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <h2>Course Management</h2>
+
+    <div class="toolbar">
+      <input type="text" id="search" placeholder="Search by code or course name">
+      <button id="addBtn">Add course</button>
+    </div>
+
+    <div id="pageMessage" class="message"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Department ID</th>
+            <th>Code</th>
+            <th>Course name</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="courseTable"></tbody>
+      </table>
+    </div>
+
+    <h2 style="margin-top: 36px;">Course Report</h2>
+    <p>Courses with their department and the number of students per year level.</p>
+
+    <div id="reportMessage" class="message"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Course code</th>
+            <th>Course name</th>
+            <th>Department</th>
+            <th>Year level</th>
+            <th>Students</th>
+          </tr>
+        </thead>
+        <tbody id="reportTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h2 id="modalTitle">Add course</h2>
+
+      <form id="courseForm">
+        <input type="hidden" id="courseId">
+
+        <label for="department">Department</label>
+        <select id="department"></select>
+
+        <label for="courseCode">Course code</label>
+        <input type="text" id="courseCode">
+
+        <label for="courseName">Course name</label>
+        <input type="text" id="courseName">
+
+        <label for="description">Description</label>
+        <input type="text" id="description">
+
+        <div id="formMessage" class="message"></div>
+
+        <div class="modal-buttons">
+          <button type="submit">Save</button>
+          <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/courseManagement.js"></script>
+</body>
+</html>

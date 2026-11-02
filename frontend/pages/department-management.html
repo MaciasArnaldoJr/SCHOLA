@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCHOLA - Department Management</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="core">
+
+  <div class="topbar">
+    <h1>SCHOLA</h1>
+    <div class="nav">
+      <a href="user-management.html">Users</a>
+      <a href="course-management.html">Courses</a>
+      <a href="department-management.html">Departments</a>
+      <span id="welcome"></span>
+      <button id="logoutBtn">Log out</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <h2>Department Management</h2>
+
+    <div class="toolbar">
+      <input type="text" id="deptSearch" placeholder="Search by code or name">
+      <button id="deptAddBtn">Add department</button>
+    </div>
+
+    <div id="deptPageMessage" class="message"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="deptTable"></tbody>
+      </table>
+    </div>
+
+    <h2 style="margin-top: 36px;">Year Levels</h2>
+
+    <div class="toolbar">
+      <input type="text" id="yearSearch" placeholder="Search year levels">
+      <button id="yearAddBtn">Add year level</button>
+    </div>
+
+    <div id="yearPageMessage" class="message"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="yearTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="overlay" id="deptOverlay">
+    <div class="modal">
+      <h2 id="deptModalTitle">Add department</h2>
+
+      <form id="deptForm">
+        <input type="hidden" id="deptId">
+
+        <label for="deptCode">Department code</label>
+        <input type="text" id="deptCode">
+
+        <label for="deptName">Department name</label>
+        <input type="text" id="deptName">
+
+        <label for="deptDescription">Description</label>
+        <input type="text" id="deptDescription">
+
+        <div id="deptFormMessage" class="message"></div>
+
+        <div class="modal-buttons">
+          <button type="submit">Save</button>
+          <button type="button" class="btn-cancel" id="deptCancelBtn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="overlay" id="yearOverlay">
+    <div class="modal">
+      <h2 id="yearModalTitle">Add year level</h2>
+
+      <form id="yearForm">
+        <input type="hidden" id="yearId">
+
+        <label for="yearName">Year level name</label>
+        <input type="text" id="yearName">
+
+        <label for="yearDescription">Description</label>
+        <input type="text" id="yearDescription">
+
+        <div id="yearFormMessage" class="message"></div>
+
+        <div class="modal-buttons">
+          <button type="submit">Save</button>
+          <button type="button" class="btn-cancel" id="yearCancelBtn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/departmentManagement.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCHOLA - Login</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="core">
+
+  <div class="login-box">
+    <h1>SCHOLA</h1>
+    <p>Log in to continue</p>
+
+    <form id="loginForm">
+      <label for="login">Username or email</label>
+      <input type="text" id="login" autocomplete="username">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" autocomplete="current-password">
+
+      <div id="message" class="message"></div>
+
+      <button type="submit">Log in</button>
+    </form>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/login.js"></script>
+</body>
+</html>

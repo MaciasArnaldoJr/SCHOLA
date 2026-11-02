@@ -1,0 +1,222 @@
+.core,
+.core * {
+  box-sizing: border-box;
+}
+
+body.core {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #fffbe6;
+  color: #111;
+}
+
+.core .topbar {
+  background: #111;
+  color: #ffc800;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.core .topbar h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.core .topbar span {
+  color: #fff;
+  margin-right: 12px;
+  font-size: 14px;
+}
+
+.core button {
+  padding: 8px 14px;
+  border: 2px solid #111;
+  background: #ffc800;
+  color: #111;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.core button:hover {
+  background: #111;
+  color: #ffc800;
+}
+
+.core .topbar button {
+  border-color: #ffc800;
+}
+
+.core .topbar button:hover {
+  background: #ffc800;
+  color: #111;
+}
+
+.core .btn-small {
+  padding: 4px 10px;
+  font-size: 13px;
+}
+
+.core .btn-delete {
+  background: #fff;
+}
+
+.core .btn-cancel {
+  background: #fff;
+}
+
+.core label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+.core input,
+.core select {
+  width: 100%;
+  padding: 8px;
+  border: 2px solid #111;
+  font-size: 15px;
+  background: #fff;
+}
+
+.core input:focus,
+.core select:focus,
+.core button:focus {
+  outline: 3px solid #ffc800;
+  outline-offset: 1px;
+}
+
+.core .message {
+  margin-top: 12px;
+  padding: 8px 10px;
+  font-size: 14px;
+  display: none;
+}
+
+.core .message.error {
+  display: block;
+  background: #fff;
+  border: 2px solid #c00;
+  color: #c00;
+}
+
+.core .message.success {
+  display: block;
+  background: #fff;
+  border: 2px solid #111;
+  color: #111;
+}
+
+.core .login-box {
+  max-width: 360px;
+  margin: 80px auto;
+  background: #fff;
+  border: 3px solid #111;
+  padding: 24px;
+}
+
+.core .login-box h1 {
+  margin: 0 0 4px 0;
+}
+
+.core .login-box p {
+  margin: 0 0 8px 0;
+  color: #555;
+}
+
+.core .login-box button {
+  width: 100%;
+  margin-top: 18px;
+  padding: 10px;
+}
+
+.core .content {
+  max-width: 1000px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+.core .toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.core .toolbar input {
+  flex: 1;
+}
+
+.core .table-wrap {
+  overflow-x: auto;
+}
+
+.core table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.core th,
+.core td {
+  border: 2px solid #111;
+  padding: 8px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.core th {
+  background: #ffc800;
+}
+
+.core .status-active {
+  font-weight: bold;
+}
+
+.core .status-inactive {
+  color: #777;
+}
+
+.core .overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.core .overlay.show {
+  display: flex;
+}
+
+.core .modal {
+  background: #fff;
+  border: 3px solid #111;
+  padding: 22px;
+  width: 360px;
+  max-width: 92%;
+  max-height: 92%;
+  overflow-y: auto;
+}
+
+.core .modal h2 {
+  margin: 0;
+}
+
+.core .modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.core .hint {
+  font-size: 12px;
+  color: #555;
+  margin-top: 4px;
+}

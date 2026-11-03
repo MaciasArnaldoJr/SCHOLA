@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Management | SCHOLA</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin-dashboard.css">
+
+    <style>
+        :root {
+            --grade-blue: #2457c5;
+            --grade-dark: #172b4d;
+            --grade-light: #edf3ff;
+            --grade-border: #e3e8f1;
+            --grade-muted: #718096;
+        }
+
+        .grade-page {
+            padding: 28px;
+            color: var(--grade-dark);
+        }
+
+        .grade-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .grade-header h1 {
+            font-size: 27px;
+            margin: 0 0 6px;
+            color: var(--grade-dark);
+        }
+
+        .grade-header p {
+            margin: 0;
+            color: var(--grade-muted);
+        }
+
+        .grade-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .grade-btn {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .grade-btn:hover {
+            transform: translateY(-1px);
+            opacity: .9;
+        }
+
+        .btn-primary {
+            background: var(--grade-blue);
+            color: white;
+        }
+
+        .btn-light {
+            background: white;
+            color: var(--grade-dark);
+            border: 1px solid var(--grade-border);
+        }
+
+        .grade-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .grade-stat {
+            background: white;
+            border: 1px solid var(--grade-border);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(20, 40, 80, .04);
+        }
+
+        .grade-stat span {
+            color: var(--grade-muted);
+            font-size: 13px;
+        }
+
+        .grade-stat h2 {
+            margin: 8px 0 0;
+            font-size: 27px;
+            color: var(--grade-blue);
+        }
+
+        .grade-panel {
+            background: white;
+            border: 1px solid var(--grade-border);
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 22px;
+            box-shadow: 0 3px 12px rgba(20, 40, 80, .04);
+        }
+
+        .grade-panel h2 {
+            font-size: 18px;
+            margin: 0 0 17px;
+        }
+
+        .grade-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .grade-search {
+            width: min(350px, 100%);
+            padding: 11px 13px;
+            border: 1px solid var(--grade-border);
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .grade-search:focus,
+        .grade-form-control:focus {
+            border-color: var(--grade-blue);
+            box-shadow: 0 0 0 3px rgba(36, 87, 197, .1);
+        }
+
+        .grade-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .grade-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+.grade-table th {
+    background: #eaf0fa;
+    color: #172b4d;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+    padding: 16px 14px;
+    border-bottom: 2px solid #cbd6e8;
+}
+
+.grade-table td {
+    padding: 16px 14px;
+    border-bottom: 1px solid #dce3ed;
+    font-size: 14px;
+    font-weight: 600;
+    color: #263750;
+}
+
+.grade-table tr:hover td {
+    background: #f0f5ff;
+    color: #142b50;
+}
+
+
+.grade-table td:first-child {
+    font-weight: 800;
+    color: #2457c5;
+}
+
+.grade-table td:nth-child(2) {
+    font-weight: 700;
+    color: #172b4d;
+}
+
+.grade-table td:nth-child(6) {
+    font-weight: 800;
+    color: #2457c5;
+        }
+
+        .grade-table td {
+            padding: 14px;
+            border-bottom: 1px solid #edf0f5;
+            font-size: 14px;
+        }
+
+        .grade-table tr:hover td {
+            background: #fafbfe;
+        }
+
+        .grade-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .passed {
+            background: #e5f7ed;
+            color: #16834b;
+        }
+
+        .failed {
+            background: #fdeaea;
+            color: #c03939;
+        }
+
+        .pending {
+            background: #fff4d9;
+            color: #9b6a00;
+        }
+
+        .action-btn {
+            border: none;
+            background: var(--grade-light);
+            color: var(--grade-blue);
+            border-radius: 6px;
+            padding: 7px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .delete-btn {
+            background: #fff0f0;
+            color: #c03939;
+        }
+
+        .grade-message {
+            display: none;
+            padding: 12px 15px;
+            margin-bottom: 17px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .grade-message.success {
+            display: block;
+            background: #e8f7ee;
+            color: #167545;
+        }
+
+        .grade-message.error {
+            display: block;
+            background: #fdecec;
+            color: #b83232;
+        }
+
+        .grade-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 25, 45, .55);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 18px;
+        }
+
+        .grade-overlay.active {
+            display: flex;
+        }
+
+        .grade-modal {
+            background: white;
+            width: 100%;
+            max-width: 650px;
+            max-height: 92vh;
+            overflow-y: auto;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, .2);
+        }
+
+        .grade-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .grade-modal-header h2 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .modal-close {
+            border: none;
+            background: none;
+            font-size: 25px;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .grade-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .grade-field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .grade-field.full {
+            grid-column: 1 / -1;
+        }
+
+        .grade-field label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #46546a;
+        }
+
+        .grade-form-control {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid var(--grade-border);
+            border-radius: 8px;
+            outline: none;
+            background: white;
+        }
+
+        .calculator-box {
+            grid-column: 1 / -1;
+            background: var(--grade-light);
+            border: 1px solid #dce7ff;
+            border-radius: 10px;
+            padding: 17px;
+        }
+
+        .calculator-box h3 {
+            margin: 0 0 12px;
+            font-size: 15px;
+            color: var(--grade-dark);
+        }
+
+        .calculator-results {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .calculator-result {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .calculator-result span {
+            display: block;
+            color: var(--grade-muted);
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .calculator-result strong {
+            font-size: 22px;
+            color: var(--grade-blue);
+        }
+
+        .calculator-note {
+            margin: 12px 0 0;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .grade-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        @media (max-width: 700px) {
+            .grade-page {
+                padding: 16px;
+            }
+
+            .grade-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .grade-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .grade-field.full,
+            .calculator-box {
+                grid-column: auto;
+            }
+        }
+
+        @media print {
+            .grade-actions,
+            .grade-toolbar,
+            .action-btn,
+            .grade-overlay {
+                display: none !important;
+            }
+
+            .grade-page {
+                padding: 0;
+            }
+
+            .grade-panel,
+            .grade-stat {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="grade-page">
+
+        <header class="grade-header">
+            <div>
+                <h1>Grade Management</h1>
+                <p>Manage student midterm and final grades with automatic GPA calculation.</p>
+            </div>
+
+            <div class="grade-actions">
+                <button class="grade-btn btn-light" id="backDashboardBtn">
+                    ← Dashboard
+                </button>
+
+                <button class="grade-btn btn-light" id="refreshBtn">
+                    ↻ Refresh
+                </button>
+
+                <button class="grade-btn btn-light" id="printBtn">
+                    Print
+                </button>
+
+                <button class="grade-btn btn-primary" id="addGradeBtn">
+                    + Add Grade
+                </button>
+            </div>
+        </header>
+
+        <div id="pageMessage" class="grade-message"></div>
+
+        <section class="grade-stats">
+            <div class="grade-stat">
+                <span>Total Grade Records</span>
+                <h2 id="totalGrades">0</h2>
+            </div>
+
+            <div class="grade-stat">
+                <span>Passed Records</span>
+                <h2 id="passedGrades">0</h2>
+            </div>
+
+            <div class="grade-stat">
+                <span>Failed Records</span>
+                <h2 id="failedGrades">0</h2>
+            </div>
+        </section>
+
+        <section class="grade-panel">
+            <div class="grade-toolbar">
+                <div>
+                    <h2>Student Grade Records</h2>
+                    <p style="margin:0;color:#718096;font-size:13px;">
+                        Midterm and final grades with calculated college GPA.
+                    </p>
+                </div>
+
+                <input
+                    type="search"
+                    id="gradeSearch"
+                    class="grade-search"
+                    placeholder="Search student or grade..."
+                >
+            </div>
+
+            <div class="grade-table-wrap">
+                <table class="grade-table">
+                    <thead>
+                        <tr>
+                            <th>Grade ID</th>
+                            <th>Student</th>
+                            <th>Loadslip ID</th>
+                            <th>Midterm Grade</th>
+                            <th>Final Grade</th>
+                            <th>College GPA</th>
+                            <th>Remarks</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="gradeTable">
+                        <tr>
+                            <td colspan="8" style="text-align:center;">
+                                Loading grade records...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ADD / EDIT MODAL -->
+    <div class="grade-overlay" id="gradeOverlay">
+        <div class="grade-modal">
+
+            <div class="grade-modal-header">
+                <h2 id="modalTitle">Add Grade</h2>
+                <button class="modal-close" id="closeModalBtn">&times;</button>
+            </div>
+
+            <div id="formMessage" class="grade-message"></div>
+
+            <form id="gradeForm">
+
+                <input type="hidden" id="gradeId">
+
+                <div class="grade-form-grid">
+
+                    <div class="grade-field">
+                        <label for="studentId">Student</label>
+                        <select id="studentId" class="grade-form-control" required>
+                            <option value="">Select Student</option>
+                        </select>
+                    </div>
+
+                    <div class="grade-field">
+                        <label for="loadslipId">Loadslip</label>
+                        <select id="loadslipId" class="grade-form-control" required>
+                            <option value="">Select Loadslip</option>
+                        </select>
+                    </div>
+
+                    <div class="grade-field">
+                        <label for="midtermGrade">Midterm Grade (%)</label>
+                        <input
+                            type="number"
+                            id="midtermGrade"
+                            class="grade-form-control"
+                            min="0"
+                            max="100"
+                            step="0.01"
+                            placeholder="Enter midterm grade"
+                            required
+                        >
+                    </div>
+
+                    <div class="grade-field">
+                        <label for="finalGrade">Final Grade (%)</label>
+                        <input
+                            type="number"
+                            id="finalGrade"
+                            class="grade-form-control"
+                            min="0"
+                            max="100"
+                            step="0.01"
+                            placeholder="Enter final grade"
+                            required
+                        >
+                    </div>
+
+                    <div class="calculator-box">
+                        <h3>Automatic College GPA Calculator</h3>
+
+                        <div class="calculator-results">
+                            <div class="calculator-result">
+                                <span>Computed Average</span>
+                                <strong id="computedAverage">—</strong>
+                            </div>
+
+                            <div class="calculator-result">
+                                <span>College GPA</span>
+                                <strong id="computedGPA">—</strong>
+                            </div>
+
+                            <div class="calculator-result">
+                                <span>Equivalent</span>
+                                <strong id="computedEquivalent">—</strong>
+                            </div>
+
+                            <div class="calculator-result">
+                                <span>Remarks</span>
+                                <strong id="computedRemarks">—</strong>
+                            </div>
+                        </div>
+
+                        <p class="calculator-note">
+                            The calculator uses the average of Midterm and Final grades.
+                            The displayed college GPA is based on the configured conversion table.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="grade-modal-actions">
+                    <button type="button" class="grade-btn btn-light" id="cancelBtn">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="grade-btn btn-primary" id="saveBtn">
+                        Save Grade
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/grade.js"></script>
+</body>
+</html>

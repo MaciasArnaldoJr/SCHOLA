@@ -2,7 +2,8 @@ const db = require('../database');
 
 exports.createUser = (user, callback) => {
     const sql = `
-        INSERT INTO Users (username, password, email, role, account_status)
+        INSERT INTO Users
+        (username, password, email, role, account_status)
         VALUES (?, ?, ?, ?, ?)
     `;
 
@@ -18,13 +19,14 @@ exports.createUser = (user, callback) => {
 exports.getAllUsers = (callback) => {
     const sql = `
         SELECT
-            u.user_id,
-            u.username,
-            u.email,
-            u.role,
-            u.account_status,
-            u.creation_date
-        FROM Users AS u
+            user_id,
+            username,
+            email,
+            role,
+            account_status,
+            creation_date
+        FROM Users
+        ORDER BY user_id ASC
     `;
 
     db.query(sql, callback);
@@ -33,14 +35,14 @@ exports.getAllUsers = (callback) => {
 exports.getUserById = (id, callback) => {
     const sql = `
         SELECT
-            u.user_id,
-            u.username,
-            u.email,
-            u.role,
-            u.account_status,
-            u.creation_date
-        FROM Users AS u
-        WHERE u.user_id = ?
+            user_id,
+            username,
+            email,
+            role,
+            account_status,
+            creation_date
+        FROM Users
+        WHERE user_id = ?
     `;
 
     db.query(sql, [id], callback);
@@ -48,14 +50,17 @@ exports.getUserById = (id, callback) => {
 
 exports.updateUser = (id, user, callback) => {
     const sql = `
-        UPDATE Users AS u
-        SET username = ?, password = ?, email = ?, role = ?, account_status = ?
-        WHERE u.user_id = ?
+        UPDATE Users
+        SET
+            username = ?,
+            email = ?,
+            role = ?,
+            account_status = ?
+        WHERE user_id = ?
     `;
 
     db.query(sql, [
         user.username,
-        user.password,
         user.email,
         user.role,
         user.account_status,
@@ -63,8 +68,21 @@ exports.updateUser = (id, user, callback) => {
     ], callback);
 };
 
+exports.updatePassword = (id, hashedPassword, callback) => {
+    const sql = `
+        UPDATE Users
+        SET password = ?
+        WHERE user_id = ?
+    `;
+
+    db.query(sql, [hashedPassword, id], callback);
+};
+
 exports.deleteUser = (id, callback) => {
-    const sql = 'DELETE FROM Users WHERE user_id = ?';
+    const sql = `
+        DELETE FROM Users
+        WHERE user_id = ?
+    `;
 
     db.query(sql, [id], callback);
 };
@@ -94,11 +112,18 @@ exports.getUserReport = (callback) => {
 };
 
 exports.findForLogin = (login, callback) => {
-  const sql = `
-    SELECT user_id, username, password, email, role, account_status
-    FROM Users
-    WHERE username = ? OR email = ?
-    LIMIT 1
-  `;
-  db.query(sql, [login, login], callback);
+    const sql = `
+        SELECT
+            user_id,
+            username,
+            password,
+            email,
+            role,
+            account_status
+        FROM Users
+        WHERE username = ? OR email = ?
+        LIMIT 1
+    `;
+
+    db.query(sql, [login, login], callback);
 };

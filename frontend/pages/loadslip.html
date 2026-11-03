@@ -4,172 +4,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCHOLA - Loadslip Management</title>
+    <title>SCHOLA | Loadslip Management</title>
+
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin-dashboard.css">
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-            margin: 0;
+        .loadslip-page {
             padding: 25px;
+            color: #172554;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .container {
-            max-width: 1450px;
-            margin: auto;
-        }
-
-        .topbar {
+        .loadslip-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-bottom: 25px;
         }
 
-        .summary {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .summary-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,.05);
-        }
-
-        .summary-card h3 {
-            margin: 0 0 10px;
-            color: #555;
-        }
-
-        .summary-card p {
-            font-size: 25px;
-            font-weight: bold;
+        .loadslip-header h1 {
             margin: 0;
+            font-size: 30px;
+            font-weight: 800;
+            color: #102653;
         }
 
-        .actions {
+        .loadslip-header p {
+            margin: 6px 0 0;
+            color: #526581;
+            font-size: 15px;
+        }
+
+        .loadslip-actions {
             display: flex;
-            gap: 10px;
             flex-wrap: wrap;
-            margin-bottom: 15px;
+            gap: 10px;
         }
 
-        input, select {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        button {
-            padding: 10px 15px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            opacity: .85;
-        }
-
-        .table-container {
-            overflow-x: auto;
-            background: white;
-            padding: 15px;
+        .loadslip-btn {
+            border: 0;
             border-radius: 8px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            background: #e2e8f0;
+            color: #1e293b;
         }
 
-        table {
+        .loadslip-btn.primary {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .loadslip-btn:hover {
+            opacity: .88;
+        }
+
+        .loadslip-stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .loadslip-stat {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, .04);
+        }
+
+        .loadslip-stat span {
+            display: block;
+            color: #526581;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .loadslip-stat strong {
+            display: block;
+            font-size: 32px;
+            font-weight: 800;
+            margin-top: 7px;
+            color: #1746b0;
+        }
+
+        .loadslip-panel {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, .04);
+        }
+
+        .loadslip-search {
             width: 100%;
-            min-width: 1200px;
+            max-width: 380px;
+            padding: 11px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            margin-bottom: 17px;
+            font-size: 14px;
+            font-family: inherit;
+            font-weight: 500;
+            color: #172554;
+        }
+
+        .loadslip-search::placeholder {
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .loadslip-table-wrap {
+            overflow-x: auto;
+        }
+
+        .loadslip-table {
+            width: 100%;
             border-collapse: collapse;
+            min-width: 1100px;
         }
 
-        th, td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
+        .loadslip-table th,
+        .loadslip-table td {
             text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
         }
 
-        th {
-            background: #eef2ff;
+        .loadslip-table th {
+            background: #eff6ff;
+            color: #153b80;
+            font-weight: 800;
         }
 
-        .modal {
+        .loadslip-table td {
+            color: #334155;
+            font-weight: 500;
+        }
+
+        .loadslip-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .loadslip-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .status-enrolled {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-dropped {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .loadslip-action {
+            border: 0;
+            border-radius: 6px;
+            padding: 7px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            margin: 2px;
+        }
+
+        .edit-loadslip {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .delete-loadslip {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .loadslip-message {
+            margin: 12px 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .loadslip-message.error {
+            color: #dc2626;
+        }
+
+        .loadslip-message.success {
+            color: #15803d;
+        }
+
+        .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,.5);
-            justify-content: center;
+            background: rgba(15, 23, 42, .6);
+            z-index: 9999;
             align-items: center;
-            padding: 20px;
-            z-index: 1000;
+            justify-content: center;
+            padding: 15px;
         }
 
-        .modal-content {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .loadslip-modal {
             width: 100%;
-            max-width: 700px;
+            max-width: 600px;
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
             max-height: 90vh;
             overflow-y: auto;
         }
 
-        .form-grid {
+        .loadslip-modal h2 {
+            margin: 0 0 20px;
+            color: #1e3a8a;
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .loadslip-form-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 15px;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
+        .loadslip-form-group {
+            margin-bottom: 5px;
         }
 
-        .form-buttons {
+        .loadslip-form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #1e293b;
+        }
+
+        .loadslip-form-group input,
+        .loadslip-form-group select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            color: #172554;
+            background: white;
+            box-sizing: border-box;
+        }
+
+        .modal-actions {
             display: flex;
+            justify-content: flex-end;
             gap: 10px;
             margin-top: 20px;
         }
 
-        .cancel-btn {
-            background: #64748b;
+        .modal-close {
+            float: right;
+            border: 0;
+            background: transparent;
+            font-size: 24px;
+            cursor: pointer;
+            color: #64748b;
         }
 
-        .message {
-            margin: 12px 0;
-        }
-
-        .success {
-            color: green;
-        }
-
-        .error {
-            color: red;
+        @media (max-width: 900px) {
+            .loadslip-stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
         }
 
         @media (max-width: 700px) {
-            .summary {
-                grid-template-columns: 1fr 1fr;
+            .loadslip-page {
+                padding: 15px;
             }
 
-            .form-grid {
+            .loadslip-stats {
                 grid-template-columns: 1fr;
             }
 
-            .topbar {
-                align-items: flex-start;
-                flex-direction: column;
-                gap: 15px;
+            .loadslip-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .loadslip-header h1 {
+                font-size: 25px;
+            }
+        }
+
+        @media print {
+            .loadslip-actions,
+            .loadslip-search,
+            .loadslip-action,
+            .modal-overlay {
+                display: none !important;
+            }
+
+            .loadslip-page {
+                padding: 0;
+            }
+
+            .loadslip-panel,
+            .loadslip-stat {
+                box-shadow: none;
+            }
+
+            .loadslip-table {
+                min-width: 0;
             }
         }
     </style>
@@ -177,162 +345,184 @@
 
 <body>
 
-<div class="container">
+<main class="loadslip-page">
 
-    <header class="topbar">
+    <header class="loadslip-header">
         <div>
-            <h1>SCHOLA</h1>
-            <h2>Loadslip Management</h2>
-            <p>Manage student subject enrollment and loadslip records.</p>
+            <h1>Loadslip Management</h1>
+            <p>Manage student enrollment and loadslip records.</p>
         </div>
 
-        <button id="logoutBtn">Logout</button>
+        <div class="loadslip-actions">
+            <button class="loadslip-btn" id="backDashboardBtn" type="button">
+                Back to Dashboard
+            </button>
+
+            <button class="loadslip-btn" id="refreshLoadslipsBtn" type="button">
+                Refresh
+            </button>
+
+            <button class="loadslip-btn" id="printLoadslipsBtn" type="button">
+                Print
+            </button>
+
+            <button class="loadslip-btn primary" id="addLoadslipBtn" type="button">
+                + Add Loadslip
+            </button>
+        </div>
     </header>
 
-    <p id="loadslipMessage" class="message"></p>
-
-    <section class="summary">
-
-        <div class="summary-card">
-            <h3>Total Loadslips</h3>
-            <p id="totalLoadslips">0</p>
+    <section class="loadslip-stats">
+        <div class="loadslip-stat">
+            <span>Total Loadslips</span>
+            <strong id="totalLoadslips">0</strong>
         </div>
 
-        <div class="summary-card">
-            <h3>Enrolled</h3>
-            <p id="enrolledCount">0</p>
+        <div class="loadslip-stat">
+            <span>Enrolled</span>
+            <strong id="enrolledCount">0</strong>
         </div>
 
-        <div class="summary-card">
-            <h3>Pending</h3>
-            <p id="pendingCount">0</p>
+        <div class="loadslip-stat">
+            <span>Pending</span>
+            <strong id="pendingCount">0</strong>
         </div>
 
-        <div class="summary-card">
-            <h3>Dropped</h3>
-            <p id="droppedCount">0</p>
+        <div class="loadslip-stat">
+            <span>Dropped</span>
+            <strong id="droppedCount">0</strong>
+        </div>
+    </section>
+
+    <section class="loadslip-panel">
+
+        <input
+            type="search"
+            id="searchLoadslips"
+            class="loadslip-search"
+            placeholder="Search student, subject, teacher, course, or status..."
+        >
+
+        <p id="loadslipMessage" class="loadslip-message"></p>
+
+        <div class="loadslip-table-wrap">
+            <table class="loadslip-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student</th>
+                        <th>Subject</th>
+                        <th>Teacher</th>
+                        <th>Semester</th>
+                        <th>Year Level</th>
+                        <th>Course</th>
+                        <th>School Year</th>
+                        <th>Section</th>
+                        <th>Status</th>
+                        <th>Date Enrolled</th>
+                        <th class="no-print">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="loadslipTableBody">
+                    <tr>
+                        <td colspan="12" style="text-align:center;padding:30px;">
+                            Loading loadslip records...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
     </section>
 
-    <div class="actions">
-        <button id="addLoadslipBtn">+ Add Loadslip</button>
+</main>
 
-        <input
-            type="text"
-            id="searchLoadslips"
-            placeholder="Search loadslips..."
-        >
+<!-- ADD / EDIT LOADSLIP MODAL -->
 
-        <button id="refreshLoadslipsBtn">Refresh</button>
-    </div>
+<div class="modal-overlay" id="loadslipModal" aria-hidden="true">
 
-    <div class="table-container">
+    <div class="loadslip-modal">
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Student</th>
-                    <th>Subject</th>
-                    <th>Teacher</th>
-                    <th>Semester</th>
-                    <th>Year Level</th>
-                    <th>Course</th>
-                    <th>School Year</th>
-                    <th>Section</th>
-                    <th>Status</th>
-                    <th>Date Enrolled</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-
-            <tbody id="loadslipTableBody">
-                <tr>
-                    <td colspan="12">Loading loadslips...</td>
-                </tr>
-            </tbody>
-        </table>
-
-    </div>
-
-</div>
-
-<div class="modal" id="loadslipModal">
-
-    <div class="modal-content">
+        <button
+            type="button"
+            class="modal-close"
+            id="closeLoadslipBtn"
+            aria-label="Close">
+            &times;
+        </button>
 
         <h2 id="modalTitle">Add Loadslip</h2>
-
-        <p id="formMessage" class="message"></p>
 
         <form id="loadslipForm">
 
             <input type="hidden" id="loadslipId">
 
-            <div class="form-grid">
+            <div class="loadslip-form-grid">
 
-                <div class="form-group">
+                <div class="loadslip-form-group">
                     <label for="studentId">Student</label>
                     <select id="studentId" required>
-                        <option value="">Select student</option>
+                        <option value="">Select Student</option>
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="loadslip-form-group">
                     <label for="subjectId">Subject</label>
                     <select id="subjectId" required>
-                        <option value="">Select subject</option>
+                        <option value="">Select Subject</option>
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="loadslip-form-group">
                     <label for="teacherId">Teacher</label>
                     <select id="teacherId" required>
-                        <option value="">Select teacher</option>
+                        <option value="">Select Teacher</option>
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="loadslip-form-group">
                     <label for="semesterId">Semester</label>
                     <select id="semesterId" required>
-                        <option value="">Select semester</option>
+                        <option value="">Select Semester</option>
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="loadslip-form-group">
                     <label for="yearLevelId">Year Level</label>
                     <select id="yearLevelId" required>
-                        <option value="">Select year level</option>
+                        <option value="">Select Year Level</option>
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="loadslip-form-group">
                     <label for="courseId">Course</label>
                     <select id="courseId" required>
-                        <option value="">Select course</option>
+                        <option value="">Select Course</option>
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="loadslip-form-group">
                     <label for="schoolYear">School Year</label>
                     <input
                         type="text"
                         id="schoolYear"
-                        placeholder="2026-2027"
+                        placeholder="Example: 2026-2027"
+                        required
                     >
                 </div>
 
-                <div class="form-group">
+                <div class="loadslip-form-group">
                     <label for="section">Section</label>
                     <input
                         type="text"
                         id="section"
                         placeholder="Example: BSIT-1A"
+                        required
                     >
                 </div>
 
-                <div class="form-group">
+                <div class="loadslip-form-group">
                     <label for="enrollmentStatus">Enrollment Status</label>
                     <select id="enrollmentStatus" required>
                         <option value="Enrolled">Enrolled</option>
@@ -341,28 +531,28 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="loadslip-form-group">
                     <label for="dateEnrolled">Date Enrolled</label>
-                    <input type="date" id="dateEnrolled">
+                    <input type="date" id="dateEnrolled" required>
                 </div>
 
             </div>
 
-            <div class="form-buttons">
-                <button type="submit">Save Loadslip</button>
+            <p id="formMessage" class="loadslip-message error"></p>
+
+            <div class="modal-actions">
                 <button
                     type="button"
-                    id="cancelLoadslipBtn"
-                    class="cancel-btn"
-                >
+                    class="loadslip-btn"
+                    id="cancelLoadslipBtn">
                     Cancel
                 </button>
+
                 <button
-                    type="button"
-                    id="closeLoadslipBtn"
-                    class="cancel-btn"
-                >
-                    Close
+                    type="submit"
+                    class="loadslip-btn primary"
+                    id="saveLoadslipBtn">
+                    Save Loadslip
                 </button>
             </div>
 
@@ -372,8 +562,7 @@
 
 </div>
 
-<script src="../js/config.js"></script>
-<script src="../js/loadslip.js"></script>
+<script src="../js/loadslip.js" defer></script>
 
 </body>
 </html>

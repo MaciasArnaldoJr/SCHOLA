@@ -1,4 +1,5 @@
-const API_BASE = 'http://localhost:3000/api';
+
+const API_URL = 'http://localhost:3000/api';
 
 const $ = id => document.getElementById(id);
 
@@ -52,6 +53,41 @@ const configs = [
     }
 ];
 
+// API CONNECTION
+
+async function fetchAPI(endpoint, options = {}) {
+    const response = await fetch(`${API_URL}${endpoint}`, {
+        ...options,
+        headers: {
+            ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+            ...options.headers
+        }
+    });
+
+    const result = await response.json().catch(() => null);
+
+    if (!response.ok) {
+        throw new Error(
+            result?.message ||
+            result?.error ||
+            `Backend error: ${response.status}`
+        );
+    }
+
+    return result;
+}
+
+function getArray(result, key) {
+    if (Array.isArray(result)) return result;
+
+    if (Array.isArray(result?.data)) return result.data;
+    if (Array.isArray(result?.records)) return result.records;
+    if (Array.isArray(result?.results)) return result.results;
+    if (Array.isArray(result?.[key])) return result[key];
+
+    return [];
+}
+
 function first(obj, keys) {
     for (const key of keys) {
         if (
@@ -67,68 +103,41 @@ function first(obj, keys) {
     return '';
 }
 
-function rows(data) {
-    if (Array.isArray(data)) return data;
-
-    for (const key of ['data', 'records', 'results', 'loadslips']) {
-        if (Array.isArray(data?.[key])) {
-            return data[key];
-        }
-    }
-
-    return [];
-}
-
-async function api(url, options = {}) {
-
-    const response = await fetch(API_BASE + url, {
-        ...options,
-        headers: {
-            'Content-Type': 'application/json',
-            ...(options.headers || {})
-        }
-    });
-
-    const text = await response.text();
-
-    let data = null;
-
-    try {
-        data = text ? JSON.parse(text) : null;
-    } catch {
-        data = text;
-    }
-
-    if (!response.ok) {
-        throw new Error(
-            data?.message ||
-            data?.error ||
-            data ||
-            `HTTP ${response.status}`
-        );
-    }
-
-    return data;
-}
-
-function esc(value) {
-
-    return String(value ?? '').replace(/[&<>"']/g, char => ({
+function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, character => ({
         '&': '&amp;',
         '<': '&lt;',
         '>': '&gt;',
         '"': '&quot;',
-        "'": '&#39;'
-    })[char]);
-
+        "'": '&#039;'
+    })[character]);
 }
+
+function normalizeValue(value) {
+    return String(value ?? '').trim().toLowerCase();
+}
+
+function showMessage(element, message, type = 'success') {
+    if (!element) return;
+
+    element.textContent = message;
+    element.className = `loadslip-message ${type}`;
+}
+
+function clearMessage(element) {
+    if (!element) return;
+
+    element.textContent = '';
+    element.className = 'loadslip-message';
+}
+
+// DROPDOWN DATA
 
 function itemId(item, config) {
     return first(item, config.id);
 }
 
 function itemName(item, config) {
-
     if (
         config.key === 'subjects' &&
         item.subject_code &&
@@ -153,38 +162,35 @@ function itemName(item, config) {
 }
 
 function selectId(key) {
-
     return {
-        students: 'student_id',
-        subjects: 'subject_id',
-        teachers: 'teacher_id',
-        semesters: 'semester_id',
-        yearlevels: 'year_level_id',
-        courses: 'course_id'
+        students: 'studentId',
+        subjects: 'subjectId',
+        teachers: 'teacherId',
+        semesters: 'semesterId',
+        yearlevels: 'yearLevelId',
+        courses: 'courseId'
     }[key];
-
 }
 
 async function loadLookups() {
-
     await Promise.all(configs.map(async config => {
-
         try {
+            const result = await fetchAPI(config.url);
 
-            lookups[config.key] = rows(
-                await api(config.url)
-            );
+            lookups[config.key] = getArray(result, config.key);
 
             const select = $(selectId(config.key));
 
-            const old = select.options[0]?.textContent || 'Select';
+            if (!select) return;
+
+            const placeholder =
+                select.options[0]?.textContent || 'Select';
 
             select.innerHTML = `
-                <option value="">${esc(old)}</option>
+                <option value="">${escapeHTML(placeholder)}</option>
             `;
 
             lookups[config.key].forEach(item => {
-
                 const id = itemId(item, config);
 
                 if (id === '') return;
@@ -195,34 +201,25 @@ async function loadLookups() {
                 option.textContent = itemName(item, config);
 
                 select.appendChild(option);
-
             });
 
         } catch (error) {
-
-            console.warn(
-                `Lookup ${config.key} unavailable:`,
+            console.error(
+                `Unable to load ${config.key}:`,
                 error.message
             );
 
             lookups[config.key] = [];
-
         }
-
     }));
-
 }
 
 function displayName(row, key, directFields, idField) {
-
     const directValue = first(row, directFields);
 
-    if (directValue) {
-        return String(directValue);
-    }
+    if (directValue) return String(directValue);
 
     const config = configs.find(item => item.key === key);
-
     const id = row[idField];
 
     const match = lookups[key].find(item =>
@@ -231,13 +228,13 @@ function displayName(row, key, directFields, idField) {
 
     return match
         ? itemName(match, config)
-        : (id ?? '—');
-
+        : (id ?? 'N/A');
 }
 
-function dateText(value) {
+// DATE AND STATUS
 
-    if (!value) return '—';
+function formatDate(value) {
+    if (!value) return 'N/A';
 
     const date = new Date(value);
 
@@ -248,15 +245,24 @@ function dateText(value) {
     return date.toLocaleDateString('en-PH', {
         year: 'numeric',
         month: 'short',
-        day: '2-digit'
+        day: 'numeric'
     });
-
 }
 
+function getStatusClass(status) {
+    const value = normalizeValue(status);
+
+    if (value === 'enrolled') return 'status-enrolled';
+    if (value === 'pending') return 'status-pending';
+    if (value === 'dropped') return 'status-dropped';
+
+    return '';
+}
+
+// FORMAT RECORD
+
 function view(row) {
-
     return {
-
         id: first(row, ['loadslip_id', 'id']),
 
         student: displayName(
@@ -276,7 +282,7 @@ function view(row) {
         teacher: displayName(
             row,
             'teachers',
-            ['teacher_name'],
+            ['teacher_name', 'full_name'],
             'teacher_id'
         ),
 
@@ -301,264 +307,269 @@ function view(row) {
             'course_id'
         ),
 
-        school: first(row, ['school_year']) || '—',
-
-        section: row.section || '—',
+        school: first(row, ['school_year']) || 'N/A',
+        section: row.section || 'N/A',
 
         status: first(row, [
             'enrollment_status',
             'status'
-        ]) || '—',
+        ]) || 'N/A',
 
-        date: dateText(
+        date: formatDate(
             first(row, ['date_enrolled', 'created_at'])
         )
-
     };
-
 }
 
-function render() {
+// STATISTICS
 
-    const query = $('searchInput').value
-        .trim()
-        .toLowerCase();
+function updateStatistics(data) {
+    $('totalLoadslips').textContent = data.length;
 
-    const filtered = loadslips.filter(row => {
+    $('enrolledCount').textContent = data.filter(row =>
+        normalizeValue(first(row, [
+            'enrollment_status',
+            'status'
+        ])) === 'enrolled'
+    ).length;
 
-        return Object.values(view(row)).some(value =>
-            String(value).toLowerCase().includes(query)
+    $('pendingCount').textContent = data.filter(row =>
+        normalizeValue(first(row, [
+            'enrollment_status',
+            'status'
+        ])) === 'pending'
+    ).length;
+
+    $('droppedCount').textContent = data.filter(row =>
+        normalizeValue(first(row, [
+            'enrollment_status',
+            'status'
+        ])) === 'dropped'
+    ).length;
+}
+
+// LOAD RECORDS
+
+async function loadLoadslips() {
+    $('loadslipTableBody').innerHTML = `
+        <tr>
+            <td colspan="12" style="text-align:center;padding:30px;">
+                Loading loadslip records...
+            </td>
+        </tr>
+    `;
+
+    clearMessage($('loadslipMessage'));
+
+    try {
+        const result = await fetchAPI('/loadslips');
+
+        loadslips = getArray(result, 'loadslips');
+
+        updateStatistics(loadslips);
+        renderLoadslips(loadslips);
+
+        showMessage(
+            $('loadslipMessage'),
+            `${loadslips.length} loadslip record(s) loaded.`,
+            'success'
         );
 
-    });
+        console.log('Loadslips retrieved from database:', loadslips);
 
-    if (!filtered.length) {
+    } catch (error) {
+        console.error('Loadslip loading error:', error);
+
+        loadslips = [];
+
+        updateStatistics([]);
 
         $('loadslipTableBody').innerHTML = `
             <tr>
-                <td colspan="12" class="ls-empty">
-                    ${
-                        loadslips.length
-                            ? 'No matching records.'
-                            : 'No loadslip records found.'
-                    }
+                <td colspan="12" style="text-align:center;padding:30px;">
+                    Unable to retrieve loadslip records.
+                </td>
+            </tr>
+        `;
+
+        showMessage(
+            $('loadslipMessage'),
+            'Loadslip loading failed: ' + error.message,
+            'error'
+        );
+    }
+}
+
+// DISPLAY RECORDS
+
+function renderLoadslips(data) {
+    if (!data.length) {
+        $('loadslipTableBody').innerHTML = `
+            <tr>
+                <td colspan="12" style="text-align:center;padding:30px;">
+                    No loadslip records found.
                 </td>
             </tr>
         `;
 
         return;
-
     }
 
-    $('loadslipTableBody').innerHTML = filtered.map(row => {
-
+    $('loadslipTableBody').innerHTML = data.map(row => {
         const value = view(row);
-
-        const statusClass = String(value.status)
-            .toLowerCase()
-            .replace(/[^a-z0-9_-]/g, '');
 
         return `
             <tr>
-
-                <td>${esc(value.id)}</td>
-                <td>${esc(value.student)}</td>
-                <td>${esc(value.subject)}</td>
-                <td>${esc(value.teacher)}</td>
-                <td>${esc(value.semester)}</td>
-                <td>${esc(value.year)}</td>
-                <td>${esc(value.course)}</td>
-                <td>${esc(value.school)}</td>
-                <td>${esc(value.section)}</td>
+                <td>${escapeHTML(value.id)}</td>
+                <td>${escapeHTML(value.student)}</td>
+                <td>${escapeHTML(value.subject)}</td>
+                <td>${escapeHTML(value.teacher)}</td>
+                <td>${escapeHTML(value.semester)}</td>
+                <td>${escapeHTML(value.year)}</td>
+                <td>${escapeHTML(value.course)}</td>
+                <td>${escapeHTML(value.school)}</td>
+                <td>${escapeHTML(value.section)}</td>
 
                 <td>
-                    <span class="ls-status ${statusClass}">
-                        ${esc(value.status)}
+                    <span class="loadslip-badge ${getStatusClass(value.status)}">
+                        ${escapeHTML(value.status)}
                     </span>
                 </td>
 
-                <td>${esc(value.date)}</td>
+                <td>${escapeHTML(value.date)}</td>
 
-                <td class="ls-row-actions">
-
+                <td class="no-print">
                     <button
-                        class="ls-small ls-edit"
+                        type="button"
+                        class="loadslip-action edit-loadslip"
                         data-action="edit"
-                        data-id="${esc(value.id)}"
-                    >
+                        data-id="${escapeHTML(value.id)}">
                         Edit
                     </button>
 
                     <button
-                        class="ls-small ls-delete"
+                        type="button"
+                        class="loadslip-action delete-loadslip"
                         data-action="delete"
-                        data-id="${esc(value.id)}"
-                    >
+                        data-id="${escapeHTML(value.id)}">
                         Delete
                     </button>
-
                 </td>
-
             </tr>
         `;
-
     }).join('');
-
 }
 
-function stats() {
+// SEARCH
 
-    $('totalLoadslips').textContent = loadslips.length;
+$('searchLoadslips').addEventListener('input', function() {
+    const searchValue = normalizeValue(this.value);
 
-    $('enrolledCount').textContent = loadslips.filter(row =>
-        String(first(row, [
-            'enrollment_status',
-            'status'
-        ])).toLowerCase() === 'enrolled'
-    ).length;
+    const filtered = loadslips.filter(row => {
+        return Object.values(view(row)).some(value =>
+            normalizeValue(value).includes(searchValue)
+        );
+    });
 
-    $('pendingCount').textContent = loadslips.filter(row =>
-        String(first(row, [
-            'enrollment_status',
-            'status'
-        ])).toLowerCase() === 'pending'
-    ).length;
+    renderLoadslips(filtered);
+});
 
+// MODAL
+
+function openAddModal() {
+    $('loadslipForm').reset();
+
+    $('loadslipId').value = '';
+
+    $('modalTitle').textContent = 'Add Loadslip';
+
+    $('saveLoadslipBtn').textContent = 'Save Loadslip';
+
+    $('enrollmentStatus').value = 'Enrolled';
+
+    $('dateEnrolled').value =
+        new Date().toISOString().slice(0, 10);
+
+    clearMessage($('formMessage'));
+
+    $('loadslipModal').classList.add('open');
+    $('loadslipModal').setAttribute('aria-hidden', 'false');
 }
 
-async function loadLoadslips() {
+function openEditModal(id) {
+    const record = loadslips.find(item =>
+        String(item.loadslip_id) === String(id)
+    );
 
-    $('pageMessage').textContent =
-        'Loading loadslip records...';
-
-    try {
-
-        loadslips = rows(
-            await api('/loadslips')
+    if (!record) {
+        showMessage(
+            $('loadslipMessage'),
+            'Loadslip record not found.',
+            'error'
         );
 
-        stats();
-        render();
-
-        $('pageMessage').textContent =
-            `${loadslips.length} loadslip record(s) loaded.`;
-
-    } catch (error) {
-
-        $('loadslipTableBody').innerHTML = `
-            <tr>
-                <td colspan="12" class="ls-empty">
-                    Unable to load records: ${esc(error.message)}
-                </td>
-            </tr>
-        `;
-
-        $('pageMessage').textContent =
-            'Check that the backend is running and /api/loadslips is available.';
-
+        return;
     }
-
-}
-
-function openModal(record) {
 
     $('loadslipForm').reset();
 
-    $('formMessage').textContent = '';
+    $('loadslipId').value = record.loadslip_id;
 
-    $('loadslipId').value = record
-        ? first(record, ['loadslip_id', 'id'])
-        : '';
+    $('studentId').value = record.student_id ?? '';
+    $('subjectId').value = record.subject_id ?? '';
+    $('teacherId').value = record.teacher_id ?? '';
+    $('semesterId').value = record.semester_id ?? '';
+    $('yearLevelId').value = record.year_level_id ?? '';
+    $('courseId').value = record.course_id ?? '';
 
-    $('modalTitle').textContent = record
-        ? 'Edit Loadslip'
-        : 'Add Loadslip';
+    $('schoolYear').value = record.school_year ?? '';
+    $('section').value = record.section ?? '';
 
-    if (record) {
+    $('enrollmentStatus').value =
+        record.enrollment_status ?? 'Enrolled';
 
-        [
-            'student_id',
-            'subject_id',
-            'teacher_id',
-            'semester_id',
-            'year_level_id',
-            'course_id',
-            'school_year',
-            'section',
-            'enrollment_status',
-            'date_enrolled'
-        ].forEach(id => {
+    $('dateEnrolled').value =
+        record.date_enrolled
+            ? String(record.date_enrolled).slice(0, 10)
+            : '';
 
-            if ($(id)) {
-                $(id).value = record[id] ?? '';
-            }
+    $('modalTitle').textContent = 'Edit Loadslip';
 
-        });
+    $('saveLoadslipBtn').textContent = 'Update Loadslip';
 
-        if ($('date_enrolled').value) {
+    clearMessage($('formMessage'));
 
-            $('date_enrolled').value =
-                String($('date_enrolled').value).slice(0, 10);
-
-        }
-
-    } else {
-
-        $('enrollment_status').value = 'Enrolled';
-
-        $('date_enrolled').value =
-            new Date().toISOString().slice(0, 10);
-
-    }
-
-    $('modalOverlay').classList.add('open');
-
-    $('modalOverlay').setAttribute(
-        'aria-hidden',
-        'false'
-    );
-
+    $('loadslipModal').classList.add('open');
+    $('loadslipModal').setAttribute('aria-hidden', 'false');
 }
 
 function closeModal() {
+    $('loadslipModal').classList.remove('open');
+    $('loadslipModal').setAttribute('aria-hidden', 'true');
 
-    $('modalOverlay').classList.remove('open');
+    $('loadslipForm').reset();
 
-    $('modalOverlay').setAttribute(
-        'aria-hidden',
-        'true'
-    );
-
+    clearMessage($('formMessage'));
 }
 
-async function save(event) {
+// SAVE RECORD
 
+$('loadslipForm').addEventListener('submit', async function(event) {
     event.preventDefault();
 
     const id = $('loadslipId').value;
 
     const payload = {
-
-        student_id: Number($('student_id').value),
-
-        subject_id: Number($('subject_id').value),
-
-        teacher_id: Number($('teacher_id').value),
-
-        semester_id: Number($('semester_id').value),
-
-        year_level_id: Number($('year_level_id').value),
-
-        course_id: Number($('course_id').value),
-
-        school_year: $('school_year').value.trim(),
-
+        student_id: Number($('studentId').value),
+        subject_id: Number($('subjectId').value),
+        teacher_id: Number($('teacherId').value),
+        semester_id: Number($('semesterId').value),
+        year_level_id: Number($('yearLevelId').value),
+        course_id: Number($('courseId').value),
+        school_year: $('schoolYear').value.trim(),
         section: $('section').value.trim(),
-
-        enrollment_status: $('enrollment_status').value,
-
-        date_enrolled: $('date_enrolled').value
-
+        enrollment_status: $('enrollmentStatus').value,
+        date_enrolled: $('dateEnrolled').value
     };
 
     if (
@@ -572,149 +583,162 @@ async function save(event) {
         !payload.section ||
         !payload.date_enrolled
     ) {
-
-        $('formMessage').textContent =
-            'Please complete all required fields.';
+        showMessage(
+            $('formMessage'),
+            'Please complete all required fields.',
+            'error'
+        );
 
         return;
-
     }
 
-    $('saveBtn').disabled = true;
-    $('saveBtn').textContent = 'Saving...';
+    const saveButton = $('saveLoadslipBtn');
+
+    saveButton.disabled = true;
+    saveButton.textContent = id ? 'Updating...' : 'Saving...';
 
     try {
-
-        await api(
-            id
-                ? `/loadslips/${encodeURIComponent(id)}`
-                : '/loadslips',
-            {
-                method: id ? 'PUT' : 'POST',
+        if (id) {
+            await fetchAPI(`/loadslips/${encodeURIComponent(id)}`, {
+                method: 'PUT',
                 body: JSON.stringify(payload)
-            }
-        );
+            });
+
+            showMessage(
+                $('loadslipMessage'),
+                'Loadslip updated successfully!',
+                'success'
+            );
+
+        } else {
+            await fetchAPI('/loadslips', {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+
+            showMessage(
+                $('loadslipMessage'),
+                'Loadslip added successfully!',
+                'success'
+            );
+        }
 
         closeModal();
 
         await loadLoadslips();
 
     } catch (error) {
+        console.error('Save loadslip error:', error);
 
-        $('formMessage').textContent = error.message;
+        showMessage(
+            $('formMessage'),
+            error.message,
+            'error'
+        );
 
     } finally {
-
-        $('saveBtn').disabled = false;
-        $('saveBtn').textContent = 'Save Loadslip';
-
+        saveButton.disabled = false;
+        saveButton.textContent = id
+            ? 'Update Loadslip'
+            : 'Save Loadslip';
     }
+});
 
-}
+// DELETE RECORD
 
-async function remove(id) {
-
-    const row = loadslips.find(item =>
-        String(first(item, ['loadslip_id', 'id'])) === String(id)
+async function deleteLoadslip(id) {
+    const record = loadslips.find(item =>
+        String(item.loadslip_id) === String(id)
     );
 
-    if (!confirm(
-        `Delete loadslip ${id}${row ? ' for ' + view(row).student : ''}?`
-    )) {
-        return;
-    }
+    if (!record) return;
+
+    const confirmed = confirm(
+        `Are you sure you want to delete loadslip ${id}?`
+    );
+
+    if (!confirmed) return;
 
     try {
+        await fetchAPI(`/loadslips/${encodeURIComponent(id)}`, {
+            method: 'DELETE'
+        });
 
-        await api(
-            `/loadslips/${encodeURIComponent(id)}`,
-            { method: 'DELETE' }
+        showMessage(
+            $('loadslipMessage'),
+            'Loadslip deleted successfully!',
+            'success'
         );
 
         await loadLoadslips();
 
     } catch (error) {
+        console.error('Delete loadslip error:', error);
 
-        $('pageMessage').textContent =
-            `Delete failed: ${error.message}`;
-
+        showMessage(
+            $('loadslipMessage'),
+            'Could not delete loadslip: ' + error.message,
+            'error'
+        );
     }
-
 }
 
-$('backDashboardBtn').addEventListener('click', () => {
+// TABLE ACTIONS
 
-    location.href = 'admin-dashboard.html';
-
-});
-
-$('refreshBtn').addEventListener('click', async () => {
-
-    await loadLookups();
-    await loadLoadslips();
-
-});
-
-$('printBtn').addEventListener('click', () => {
-
-    window.print();
-
-});
-
-$('addBtn').addEventListener('click', () => {
-
-    openModal(null);
-
-});
-
-$('cancelBtn').addEventListener('click', closeModal);
-
-$('closeModalBtn').addEventListener('click', closeModal);
-
-$('modalOverlay').addEventListener('click', event => {
-
-    if (event.target === $('modalOverlay')) {
-        closeModal();
-    }
-
-});
-
-$('loadslipForm').addEventListener('submit', save);
-
-$('searchInput').addEventListener('input', render);
-
-
-$('loadslipTableBody').addEventListener('click', event => {
-
-    const button = event.target.closest(
-        'button[data-action]'
-    );
+$('loadslipTableBody').addEventListener('click', function(event) {
+    const button = event.target.closest('button[data-action]');
 
     if (!button) return;
 
-    const row = loadslips.find(item =>
-        String(first(item, ['loadslip_id', 'id'])) ===
-        String(button.dataset.id)
-    );
+    const action = button.dataset.action;
+    const id = button.dataset.id;
 
-    if (button.dataset.action === 'edit' && row) {
-
-        openModal(row);
-
+    if (action === 'edit') {
+        openEditModal(id);
     }
 
-    if (button.dataset.action === 'delete') {
-
-        remove(button.dataset.id);
-
+    if (action === 'delete') {
+        deleteLoadslip(id);
     }
-
 });
 
-(async () => {
+// BUTTONS
+
+$('addLoadslipBtn').addEventListener('click', openAddModal);
+
+$('cancelLoadslipBtn').addEventListener('click', closeModal);
+
+$('closeLoadslipBtn').addEventListener('click', closeModal);
+
+$('refreshLoadslipsBtn').addEventListener('click', async function() {
+    await loadLookups();
+    await loadLoadslips();
+});
+
+$('backDashboardBtn')?.addEventListener('click', function() {
+    window.location.href = 'admin-dashboard.html';
+});
+
+$('printLoadslipsBtn')?.addEventListener('click', function() {
+    if (loadslips.length === 0) {
+        alert('There are no loadslip records to print.');
+        return;
+    }
+
+    window.print();
+});
+
+$('loadslipModal').addEventListener('click', function(event) {
+    if (event.target === this) {
+        closeModal();
+    }
+});
+
+// INITIALIZE
+
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('SCHOLA Loadslip Management started.');
 
     await loadLookups();
-
     await loadLoadslips();
-
-})();
+});

@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SCHOLA | Admin Dashboard</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin-dashboard.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-header">
+            <div class="brand-logo">S</div>
+            <div class="brand-text">
+                <h2>SCHOLA</h2>
+                <p>School Management System</p>
+            </div>
+        </div>
+
+        <div class="sidebar-label">MAIN MENU</div>
+
+        <nav class="sidebar-menu">
+
+            <a href="#" class="sidebar-link active" data-view="dashboard">
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </a>
+
+            <p class="sidebar-heading">ACADEMIC MANAGEMENT</p>
+
+            <a href="#" class="sidebar-link" data-view="courses">
+                <span class="nav-icon">📚</span>
+                <span>Courses</span>
+            </a>
+
+            <a href="#" class="sidebar-link" data-view="departments">
+                <span class="nav-icon">🏢</span>
+                <span>Departments</span>
+            </a>
+
+            <a href="#" class="sidebar-link" data-view="enrollment">
+                <span class="nav-icon">📝</span>
+                <span>Enrollment</span>
+            </a>
+
+            <a href="#" class="sidebar-link" data-view="evaluation">
+                <span class="nav-icon">📋</span>
+                <span>Evaluation</span>
+            </a>
+
+            <a href="#" class="sidebar-link" data-view="grades">
+                <span class="nav-icon">📊</span>
+                <span>Grades</span>
+            </a>
+
+            <a href="#" class="sidebar-link" data-view="loadslip">
+                <span class="nav-icon">📄</span>
+                <span>Load Slip</span>
+            </a>
+
+            <p class="sidebar-heading">SYSTEM MANAGEMENT</p>
+
+            <a href="#" class="sidebar-link" data-view="users">
+                <span class="nav-icon">👥</span>
+                <span>Users</span>
+            </a>
+
+            <a href="#" class="sidebar-link" data-view="reports">
+                <span class="nav-icon">📈</span>
+                <span>Reports</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="footer-logo">S</div>
+            <div>
+                <strong>SCHOLA SYSTEM</strong>
+                <small>Administrator Panel</small>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button id="menuToggle" class="menu-toggle" type="button">
+                    ☰
+                </button>
+
+                <div>
+                    <h2 id="pageTitle">Dashboard</h2>
+                    <p>Overview of your school management system</p>
+                </div>
+
+            </div>
+
+            <div class="topbar-right">
+
+                <div class="topbar-date">
+                    <span>●</span>
+                    System Online
+                </div>
+
+                <div class="admin-profile">
+
+                    <div class="admin-avatar" id="adminAvatar">A</div>
+
+                    <div class="admin-details">
+                        <strong id="topbarAdminName">Administrator</strong>
+                        <small>System Administrator</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE CONTENT -->
+        <section class="page-content" id="pageContent">
+
+            <!-- WELCOME BANNER -->
+            <div class="dashboard-welcome">
+
+                <div class="welcome-content">
+                    <span class="welcome-label">ADMINISTRATOR DASHBOARD</span>
+
+                    <h1>Welcome to SCHOLA!</h1>
+
+                    <p>
+                        Your central hub for managing academic records,
+                        departments, enrollment, grades, and school information.
+                    </p>
+
+                    <div class="welcome-status">
+                        <span class="status-dot"></span>
+                        Your management dashboard is ready.
+                    </div>
+                </div>
+
+                <div class="welcome-decoration">
+                    <div class="decoration-circle circle-one"></div>
+                    <div class="decoration-circle circle-two"></div>
+                    <div class="decoration-icon">🎓</div>
+                    <div class="decoration-caption">
+                        <strong>LEARN.</strong>
+                        <strong>MANAGE.</strong>
+                        <strong>EXCEL.</strong>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- STATISTICS -->
+            <div class="section-header stats-heading">
+                <div>
+                    <h2>System Overview</h2>
+                    <p>Summary of your school's records and information.</p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+
+                <div class="stat-card stat-blue">
+                    <div class="stat-top">
+                        <div class="stat-icon">📚</div>
+                        <span class="stat-label">ACADEMIC</span>
+                    </div>
+
+                    <div class="stat-info">
+                        <p>Total Courses</p>
+                        <h2 id="totalCourses">0</h2>
+                    </div>
+
+                    <div class="stat-bottom">Registered courses</div>
+                </div>
+
+
+                <div class="stat-card stat-purple">
+                    <div class="stat-top">
+                        <div class="stat-icon">🏢</div>
+                        <span class="stat-label">ORGANIZATION</span>
+                    </div>
+
+                    <div class="stat-info">
+                        <p>Total Departments</p>
+                        <h2 id="totalDepartments">0</h2>
+                    </div>
+
+                    <div class="stat-bottom">Available departments</div>
+                </div>
+
+
+                <div class="stat-card stat-green">
+                    <div class="stat-top">
+                        <div class="stat-icon">👥</div>
+                        <span class="stat-label">ACCOUNTS</span>
+                    </div>
+
+                    <div class="stat-info">
+                        <p>Total Users</p>
+                        <h2 id="totalUsers">0</h2>
+                    </div>
+
+                    <div class="stat-bottom">Registered system users</div>
+                </div>
+
+
+                <div class="stat-card stat-orange">
+                    <div class="stat-top">
+                        <div class="stat-icon">📝</div>
+                        <span class="stat-label">RECORDS</span>
+                    </div>
+
+                    <div class="stat-info">
+                        <p>Total Enrollments</p>
+                        <h2 id="totalEnrollments">0</h2>
+                    </div>
+
+                    <div class="stat-bottom">Enrollment records</div>
+                </div>
+
+            </div>
+
+
+            <!-- QUICK ACCESS -->
+            <div class="section-header quick-heading">
+
+                <div>
+                    <h2>Quick Access</h2>
+                    <p>Select a module to manage your school records.</p>
+                </div>
+
+                <span class="section-tag">8 MODULES</span>
+
+            </div>
+
+
+            <div class="module-grid">
+
+                <div class="module-card module-blue" data-view="courses">
+                    <div class="module-icon">📚</div>
+                    <div class="module-card-content">
+                        <h3>Courses</h3>
+                        <p>Manage course information and academic programs.</p>
+                    </div>
+                    <span class="module-action">Open Module <b>→</b></span>
+                </div>
+
+
+                <div class="module-card module-purple" data-view="departments">
+                    <div class="module-icon">🏢</div>
+                    <div class="module-card-content">
+                        <h3>Departments</h3>
+                        <p>Organize and manage school departments.</p>
+                    </div>
+                    <span class="module-action">Open Module <b>→</b></span>
+                </div>
+
+
+                <div class="module-card module-green" data-view="enrollment">
+                    <div class="module-icon">📝</div>
+                    <div class="module-card-content">
+                        <h3>Enrollment</h3>
+                        <p>Manage and monitor student enrollment records.</p>
+                    </div>
+                    <span class="module-action">Open Module <b>→</b></span>
+                </div>
+
+
+                <div class="module-card module-orange" data-view="evaluation">
+                    <div class="module-icon">📋</div>
+                    <div class="module-card-content">
+                        <h3>Evaluation</h3>
+                        <p>Manage student evaluation information.</p>
+                    </div>
+                    <span class="module-action">Open Module <b>→</b></span>
+                </div>
+
+
+                <div class="module-card module-red" data-view="grades">
+                    <div class="module-icon">📊</div>
+                    <div class="module-card-content">
+                        <h3>Grades</h3>
+                        <p>View and manage student academic grades.</p>
+                    </div>
+                    <span class="module-action">Open Module <b>→</b></span>
+                </div>
+
+
+                <div class="module-card module-cyan" data-view="loadslip">
+                    <div class="module-icon">📄</div>
+                    <div class="module-card-content">
+                        <h3>Load Slip</h3>
+                        <p>View and manage student load slip records.</p>
+                    </div>
+                    <span class="module-action">Open Module <b>→</b></span>
+                </div>
+
+
+                <div class="module-card module-pink" data-view="users">
+                    <div class="module-icon">👥</div>
+                    <div class="module-card-content">
+                        <h3>Users</h3>
+                        <p>Manage registered system users and information.</p>
+                    </div>
+                    <span class="module-action">Open Module <b>→</b></span>
+                </div>
+
+
+                <div class="module-card module-indigo" data-view="reports">
+                    <div class="module-icon">📈</div>
+                    <div class="module-card-content">
+                        <h3>Reports</h3>
+                        <p>Review and generate school management reports.</p>
+                    </div>
+                    <span class="module-action">Open Module <b>→</b></span>
+                </div>
+
+            </div>
+
+
+            <!-- RECENT ACTIVITY -->
+            <div class="section-header activity-heading">
+                <div>
+                    <h2>Recent Activity</h2>
+                    <p>Latest updates and system activities.</p>
+                </div>
+            </div>
+
+            <div class="activity-card" id="recentActivity">
+
+                <div class="activity-empty">
+                    <div class="activity-empty-icon">🗂️</div>
+                    <div>
+                        <strong>No recent activity</strong>
+                        <p>System activities will appear here when available.</p>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- FOOTER -->
+            <footer class="dashboard-footer">
+                <p>© 2026 SCHOLA School Management System.</p>
+                <span>ADMINISTRATOR PANEL</span>
+            </footer>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="../js/admin-dashboard.js"></script>
+
+</body>
+</html>

@@ -53,7 +53,6 @@ const configs = [
     }
 ];
 
-// API CONNECTION
 
 async function fetchAPI(endpoint, options = {}) {
     const response = await fetch(`${API_URL}${endpoint}`, {
@@ -231,8 +230,6 @@ function displayName(row, key, directFields, idField) {
         : (id ?? 'N/A');
 }
 
-// DATE AND STATUS
-
 function formatDate(value) {
     if (!value) return 'N/A';
 
@@ -259,7 +256,6 @@ function getStatusClass(status) {
     return '';
 }
 
-// FORMAT RECORD
 
 function view(row) {
     return {
@@ -321,8 +317,6 @@ function view(row) {
     };
 }
 
-// STATISTICS
-
 function updateStatistics(data) {
     $('totalLoadslips').textContent = data.length;
 
@@ -347,8 +341,6 @@ function updateStatistics(data) {
         ])) === 'dropped'
     ).length;
 }
-
-// LOAD RECORDS
 
 async function loadLoadslips() {
     $('loadslipTableBody').innerHTML = `
@@ -399,8 +391,6 @@ async function loadLoadslips() {
         );
     }
 }
-
-// DISPLAY RECORDS
 
 function renderLoadslips(data) {
     if (!data.length) {
@@ -460,8 +450,6 @@ function renderLoadslips(data) {
     }).join('');
 }
 
-// SEARCH
-
 $('searchLoadslips').addEventListener('input', function() {
     const searchValue = normalizeValue(this.value);
 
@@ -473,8 +461,6 @@ $('searchLoadslips').addEventListener('input', function() {
 
     renderLoadslips(filtered);
 });
-
-// MODAL
 
 function openAddModal() {
     $('loadslipForm').reset();
@@ -551,8 +537,6 @@ function closeModal() {
 
     clearMessage($('formMessage'));
 }
-
-// SAVE RECORD
 
 $('loadslipForm').addEventListener('submit', async function(event) {
     event.preventDefault();
@@ -644,8 +628,6 @@ $('loadslipForm').addEventListener('submit', async function(event) {
     }
 });
 
-// DELETE RECORD
-
 async function deleteLoadslip(id) {
     const record = loadslips.find(item =>
         String(item.loadslip_id) === String(id)
@@ -683,8 +665,6 @@ async function deleteLoadslip(id) {
     }
 }
 
-// TABLE ACTIONS
-
 $('loadslipTableBody').addEventListener('click', function(event) {
     const button = event.target.closest('button[data-action]');
 
@@ -701,8 +681,6 @@ $('loadslipTableBody').addEventListener('click', function(event) {
         deleteLoadslip(id);
     }
 });
-
-// BUTTONS
 
 $('addLoadslipBtn').addEventListener('click', openAddModal);
 

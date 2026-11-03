@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SCHOLA | Evaluation Management</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin-dashboard.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f7fc;
+            color: #1e293b;
+        }
+
+        .evaluation-page {
+            padding: 28px;
+            max-width: 1600px;
+            margin: auto;
+        }
+
+        .evaluation-welcome {
+            background: linear-gradient(120deg, #102b55, #2463bd);
+            color: white;
+            padding: 32px;
+            border-radius: 18px;
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .evaluation-welcome h1 {
+            font-size: 28px;
+            margin: 10px 0;
+        }
+
+        .evaluation-welcome p {
+            color: #dce9ff;
+            max-width: 650px;
+            line-height: 1.7;
+        }
+
+        .welcome-label {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: #bfdbfe;
+        }
+
+        .evaluation-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 9px;
+            padding: 11px 17px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #334155;
+            border: 1px solid #dbe3ef;
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .btn-small {
+            padding: 7px 10px;
+            font-size: 11px;
+            margin: 2px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .evaluation-stat {
+            background: white;
+            padding: 22px;
+            border-radius: 14px;
+            border: 1px solid #e7edf5;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, .04);
+        }
+
+        .evaluation-stat span {
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .evaluation-stat h2 {
+            margin: 10px 0 0;
+            color: #163b70;
+            font-size: 29px;
+        }
+
+        .section-card {
+            background: white;
+            border: 1px solid #e5eaf2;
+            border-radius: 15px;
+            padding: 22px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, .035);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .section-header h2 {
+            margin: 0 0 6px;
+            color: #17365f;
+            font-size: 19px;
+        }
+
+        .section-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .table-tools {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .search-input {
+            width: 280px;
+            max-width: 100%;
+            padding: 11px 13px;
+            border: 1px solid #dbe3ef;
+            border-radius: 9px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .search-input:focus,
+        .form-control:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, .12);
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th {
+            background: #f1f5fb;
+            color: #475569;
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #edf1f6;
+            font-size: 12px;
+            color: #334155;
+            vertical-align: middle;
+        }
+
+        tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        .table-empty {
+            text-align: center;
+            padding: 30px;
+            color: #94a3b8;
+        }
+
+        .type-badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            background: #eaf2ff;
+            color: #2459a6;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .percentage {
+            font-weight: 800;
+            color: #166534;
+        }
+
+        .message {
+            display: none;
+            padding: 12px 15px;
+            border-radius: 9px;
+            margin-bottom: 18px;
+            font-size: 13px;
+        }
+
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* MODAL */
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, .6);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            width: 100%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .2);
+        }
+
+        .modal h2 {
+            color: #17365f;
+            margin: 0 0 20px;
+            font-size: 21px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 7px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #dbe3ef;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+            background: white;
+        }
+
+        textarea.form-control {
+            min-height: 85px;
+            resize: vertical;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .dashboard-back {
+            text-decoration: none;
+        }
+
+        .evaluation-footer {
+            text-align: center;
+            padding: 22px;
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        @media (max-width: 800px) {
+            .evaluation-page {
+                padding: 16px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .evaluation-welcome {
+                padding: 23px;
+            }
+
+            .evaluation-welcome h1 {
+                font-size: 23px;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .evaluation-page {
+                padding: 0;
+                max-width: none;
+            }
+
+            .evaluation-actions,
+            .table-tools,
+            .action-column,
+            .evaluation-stat,
+            .modal-overlay,
+            .dashboard-back {
+                display: none !important;
+            }
+
+            .evaluation-welcome {
+                background: white;
+                color: black;
+                padding: 10px 0;
+            }
+
+            .evaluation-welcome p,
+            .welcome-label {
+                color: #333;
+            }
+
+            .section-card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                break-inside: avoid;
+            }
+
+            table {
+                min-width: 0;
+            }
+
+            th, td {
+                font-size: 9px;
+                padding: 7px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="evaluation-page">
+
+    <div class="evaluation-actions">
+
+        <a href="./admin-dashboard.html"
+           class="btn btn-secondary dashboard-back">
+            ← Back to Dashboard
+        </a>
+
+        <button class="btn btn-secondary" id="refreshBtn" type="button">
+            ↻ Refresh
+        </button>
+
+        <button class="btn btn-secondary" id="printBtn" type="button">
+            🖨 Print
+        </button>
+
+    </div>
+
+    <!-- WELCOME BANNER -->
+    <div class="evaluation-welcome">
+
+        <span class="welcome-label">SCHOLA · ACADEMIC MANAGEMENT</span>
+
+        <h1>Evaluation Management</h1>
+
+        <p>
+            Manage academic activities, record student scores,
+            monitor performance, and review evaluation results.
+        </p>
+
+    </div>
+
+    <div id="pageMessage" class="message"></div>
+
+    <!-- STATISTICS -->
+    <div class="stats-grid">
+
+        <div class="evaluation-stat">
+            <span>TOTAL ACTIVITIES</span>
+            <h2 id="totalActivities">0</h2>
+        </div>
+
+        <div class="evaluation-stat">
+            <span>TOTAL SCORES</span>
+            <h2 id="totalScores">0</h2>
+        </div>
+
+        <div class="evaluation-stat">
+            <span>AVERAGE PERFORMANCE</span>
+            <h2 id="averagePercentage">0%</h2>
+        </div>
+
+    </div>
+
+    <!-- ACTIVITY SECTION -->
+    <section class="section-card">
+
+        <div class="section-header">
+
+            <div>
+                <h2>📋 Activity Management</h2>
+                <p>Manage quizzes, assignments, and performance tasks.</p>
+            </div>
+
+            <button class="btn btn-primary" id="addActivityBtn" type="button">
+                + Add Activity
+            </button>
+
+        </div>
+
+        <div class="table-tools">
+
+            <input
+                type="search"
+                id="activitySearch"
+                class="search-input"
+                placeholder="Search activities..."
+            >
+
+        </div>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Activity Title</th>
+                        <th>Type</th>
+                        <th>Total Points</th>
+                        <th>Due Date</th>
+                        <th class="action-column">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="activityTable">
+
+                    <tr>
+                        <td colspan="6" class="table-empty">
+                            Loading activities...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <!-- SCORE SECTION -->
+    <section class="section-card">
+
+        <div class="section-header">
+
+            <div>
+                <h2>📊 Score Management</h2>
+                <p>View and manage student activity scores and remarks.</p>
+            </div>
+
+            <button class="btn btn-primary" id="addScoreBtn" type="button">
+                + Add Score
+            </button>
+
+        </div>
+
+        <div class="table-tools">
+
+            <input
+                type="search"
+                id="scoreSearch"
+                class="search-input"
+                placeholder="Search scores or students..."
+            >
+
+        </div>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Score ID</th>
+                        <th>Activity</th>
+                        <th>Student</th>
+                        <th>Points Earned</th>
+                        <th>Percentage</th>
+                        <th>Remarks</th>
+                        <th>Date Graded</th>
+                        <th class="action-column">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="scoreTable">
+
+                    <tr>
+                        <td colspan="8" class="table-empty">
+                            Loading scores...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <footer class="evaluation-footer">
+        © 2026 SCHOLA School Management System · Administrator Panel
+    </footer>
+
+</div>
+
+
+<!-- REUSABLE MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+
+    <div class="modal">
+
+        <h2 id="modalTitle">Add Record</h2>
+
+        <div id="formMessage" class="message"></div>
+
+        <form id="evaluationForm">
+
+            <div id="modalFields"></div>
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="cancelBtn">
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="saveBtn">
+                    Save Record
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="../js/evaluation.js"></script>
+
+</body>
+</html>

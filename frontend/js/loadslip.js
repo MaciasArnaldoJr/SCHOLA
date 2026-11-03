@@ -712,8 +712,6 @@ $('loadslipModal').addEventListener('click', function(event) {
     }
 });
 
-// INITIALIZE
-
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('SCHOLA Loadslip Management started.');
 

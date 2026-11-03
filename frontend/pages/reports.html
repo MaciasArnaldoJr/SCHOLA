@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCHOLA | Reports</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin-dashboard.css">
+
+    <style>
+        .reports-page {
+            padding: 28px;
+            color: #172554;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        .reports-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .reports-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0;
+            color: #172554;
+        }
+
+        .reports-header p {
+            color: #64748b;
+            margin-top: 7px;
+            font-size: 15px;
+        }
+
+        .reports-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .report-btn {
+            padding: 11px 17px;
+            border: none;
+            border-radius: 8px;
+            background: #e2e8f0;
+            color: #1e293b;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .report-btn.primary {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .report-btn:hover {
+            opacity: .88;
+        }
+
+        .report-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .report-stat {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 13px;
+            padding: 21px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, .05);
+        }
+
+        .report-stat span {
+            display: block;
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .report-stat strong {
+            display: block;
+            margin-top: 8px;
+            color: #1d4ed8;
+            font-size: 29px;
+            font-weight: 800;
+        }
+
+        .reports-panel {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 13px;
+            padding: 22px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, .05);
+        }
+
+        .reports-toolbar {
+            display: flex;
+            align-items: end;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .report-field {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .report-field label {
+            display: block;
+            margin-bottom: 8px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .report-field select,
+        .report-field input {
+            width: 100%;
+            min-height: 43px;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+            color: #172554;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .report-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+        }
+
+        .report-table {
+            width: 100%;
+            min-width: 750px;
+            border-collapse: collapse;
+        }
+
+        .report-table th {
+            padding: 14px;
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-size: 13px;
+            font-weight: 800;
+            text-align: left;
+            white-space: nowrap;
+            border-bottom: 1px solid #dbeafe;
+        }
+
+        .report-table td {
+            padding: 13px 14px;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 600;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        .report-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .report-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .report-message {
+            margin: 12px 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .report-message.error {
+            color: #dc2626;
+        }
+
+        .report-message.success {
+            color: #15803d;
+        }
+
+        .empty-message {
+            padding: 25px !important;
+            text-align: center !important;
+            color: #64748b !important;
+        }
+
+        @media (max-width: 700px) {
+            .reports-page {
+                padding: 15px;
+            }
+
+            .report-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .reports-header h1 {
+                font-size: 23px;
+            }
+
+            .reports-panel {
+                padding: 15px;
+            }
+        }
+
+        @media print {
+            .reports-actions,
+            .reports-toolbar,
+            #pageMessage {
+                display: none !important;
+            }
+
+            .reports-page {
+                padding: 0;
+            }
+
+            .reports-panel,
+            .report-stat {
+                box-shadow: none;
+            }
+
+            .report-table {
+                min-width: 0;
+            }
+
+            .report-table th,
+            .report-table td {
+                font-size: 9px;
+                padding: 6px;
+                white-space: normal;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<main class="reports-page">
+
+    <header class="reports-header">
+        <div>
+            <h1>Reports Management</h1>
+            <p>View and print records stored in the SCHOLA database.</p>
+        </div>
+
+        <div class="reports-actions">
+            <button type="button" class="report-btn" id="backDashboardBtn">
+                Back to Dashboard
+            </button>
+
+            <button type="button" class="report-btn" id="refreshBtn">
+                Refresh
+            </button>
+
+            <button type="button" class="report-btn primary" id="printBtn">
+                Print Report
+            </button>
+        </div>
+    </header>
+
+    <section class="report-stats">
+        <div class="report-stat">
+            <span>Selected Table</span>
+            <strong id="selectedTable">—</strong>
+        </div>
+
+        <div class="report-stat">
+            <span>Total Records</span>
+            <strong id="totalRecords">0</strong>
+        </div>
+
+        <div class="report-stat">
+            <span>Displayed Records</span>
+            <strong id="displayedRecords">0</strong>
+        </div>
+    </section>
+
+    <section class="reports-panel">
+
+        <div class="reports-toolbar">
+            <div class="report-field">
+                <label for="tableSelect">Select Database Table</label>
+                <select id="tableSelect">
+                    <option value="departments">Department</option>
+                    <option value="yearlevels">YearLevel</option>
+                    <option value="semesters">Semester</option>
+                    <option value="users">Users</option>
+                    <option value="courses">Course</option>
+                    <option value="students">Students</option>
+                    <option value="teachers">Teachers</option>
+                    <option value="subjects">Subjects</option>
+                    <option value="rooms">Room</option>
+                    <option value="loadslips">Loadslip</option>
+                    <option value="schedules">Schedule</option>
+                    <option value="activities">Activities</option>
+                    <option value="scores">Scores</option>
+                    <option value="grades">Grade</option>
+                    <option value="attendance">Attendance</option>
+                    <option value="learningmaterials">LearningMaterial</option>
+                </select>
+            </div>
+
+            <div class="report-field">
+                <label for="reportSearch">Search Records</label>
+                <input
+                    type="search"
+                    id="reportSearch"
+                    placeholder="Search in displayed records..."
+                >
+            </div>
+
+            <button type="button" class="report-btn primary" id="loadReportBtn">
+                Load Report
+            </button>
+        </div>
+
+        <p id="pageMessage" class="report-message">
+            Select a table to view its records.
+        </p>
+
+        <div class="report-table-wrap">
+            <table class="report-table">
+                <thead id="reportTableHead">
+                    <tr>
+                        <th>Database Fields</th>
+                    </tr>
+                </thead>
+
+                <tbody id="reportTableBody">
+                    <tr>
+                        <td class="empty-message">
+                            Select a database table and click Load Report.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+</main>
+
+<script src="../js/reports.js" defer></script>
+
+</body>
+</html>

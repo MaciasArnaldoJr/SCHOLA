@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCHOLA | User Management</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin-dashboard.css">
+
+    
+    <style>
+        .users-page {
+            padding: 25px;
+            color: #172554;
+        }
+
+        .users-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .users-header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .users-header p {
+            margin: 6px 0 0;
+            color: #64748b;
+        }
+
+        .users-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .users-btn {
+            border: 0;
+            border-radius: 8px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-weight: 600;
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .users-btn.primary {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .users-btn:hover {
+            opacity: .88;
+        }
+
+        .users-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .users-stat {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, .04);
+        }
+
+        .users-stat span {
+            display: block;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .users-stat strong {
+            display: block;
+            font-size: 28px;
+            margin-top: 7px;
+            color: #1e40af;
+        }
+
+        .users-panel {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, .04);
+        }
+
+        .users-search {
+            width: 100%;
+            max-width: 380px;
+            padding: 11px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            margin-bottom: 17px;
+            font-size: 14px;
+        }
+
+        .users-table-wrap {
+            overflow-x: auto;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        .users-table th,
+        .users-table td {
+            text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+
+        .users-table th {
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-weight: 700;
+        }
+
+        .users-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .user-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .role-admin {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .role-teacher {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .role-student {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .user-action {
+            border: 0;
+            border-radius: 6px;
+            padding: 7px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 2px;
+        }
+
+        .edit-user {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .delete-user {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .users-message {
+            margin: 12px 0;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        .users-message.error {
+            color: #dc2626;
+        }
+
+        .users-message.success {
+            color: #15803d;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, .6);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .users-modal {
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .users-modal h2 {
+            margin: 0 0 20px;
+            color: #1e3a8a;
+        }
+
+        .user-form-group {
+            margin-bottom: 15px;
+        }
+
+        .user-form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        .user-form-group input,
+        .user-form-group select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .password-note {
+            display: block;
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 700px) {
+            .users-page {
+                padding: 15px;
+            }
+
+            .users-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .users-header h1 {
+                font-size: 23px;
+            }
+        }
+
+        @media print {
+            .users-actions,
+            .users-search,
+            .user-action,
+            .modal-overlay {
+                display: none !important;
+            }
+
+            .users-page {
+                padding: 0;
+            }
+
+            .users-panel,
+            .users-stat {
+                box-shadow: none;
+            }
+        }
+
+.users-page {
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    color: #172554;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.users-header h1 {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+    color: #102653;
+}
+
+.users-header p {
+    font-size: 15px;
+    font-weight: 500;
+    color: #526581;
+}
+
+.users-btn {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1px;
+}
+
+.users-stat span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #526581;
+}
+
+.users-stat strong {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1746b0;
+    letter-spacing: -0.5px;
+}
+
+.users-search {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: #172554;
+    background: #ffffff;
+}
+
+.users-search::placeholder {
+    color: #718096;
+    font-weight: 500;
+    opacity: 1;
+}
+
+.users-table th {
+    font-size: 14px;
+    font-weight: 800;
+    color: #153b80;
+    letter-spacing: 0.2px;
+}
+
+.users-table td {
+    font-size: 14px;
+    font-weight: 500;
+    color: #334155;
+}
+
+.user-badge {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+}
+
+.user-action {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.users-modal h2 {
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.user-form-group label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.user-form-group input,
+.user-form-group select {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: #172554;
+    background: #ffffff;
+}
+
+.users-message {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.password-note {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+@media (max-width: 700px) {
+    .users-header h1 {
+        font-size: 25px;
+        font-weight: 800;
+    }
+}
+    </style>
+</head>
+
+<body>
+    <main class="users-page">
+
+        <header class="users-header">
+            <div>
+                <h1>User Management</h1>
+                <p>Manage SCHOLA administrator, teacher, and student accounts.</p>
+            </div>
+
+            <div class="users-actions">
+                <button class="users-btn" id="backDashboardBtn">
+                    Back to Dashboard
+                </button>
+
+                <button class="users-btn" id="refreshUsersBtn">
+                    Refresh
+                </button>
+
+                <button class="users-btn" id="printUsersBtn">
+                    Print
+                </button>
+
+                <button class="users-btn primary" id="addUserBtn">
+                    + Add User
+                </button>
+            </div>
+        </header>
+
+        <section class="users-stats">
+            <div class="users-stat">
+                <span>Total Users</span>
+                <strong id="totalUsers">0</strong>
+            </div>
+
+            <div class="users-stat">
+                <span>Active Accounts</span>
+                <strong id="activeUsers">0</strong>
+            </div>
+
+            <div class="users-stat">
+                <span>Inactive Accounts</span>
+                <strong id="inactiveUsers">0</strong>
+            </div>
+        </section>
+
+        <section class="users-panel">
+            <input
+                type="search"
+                id="userSearch"
+                class="users-search"
+                placeholder="Search username, email, role, or status..."
+            >
+
+            <p id="pageMessage" class="users-message"></p>
+
+            <div class="users-table-wrap">
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Account Status</th>
+                            <th>Creation Date</th>
+                            <th class="no-print">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="usersTableBody">
+                        <tr>
+                            <td colspan="7">Loading users...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add/Edit User Modal -->
+    <div class="modal-overlay" id="userModal">
+        <div class="users-modal">
+            <h2 id="modalTitle">Add User</h2>
+
+            <form id="userForm">
+                <input type="hidden" id="userId">
+
+                <div class="user-form-group">
+                    <label for="username">Username / Full Name</label>
+                    <input
+                        type="text"
+                        id="username"
+                        required
+                        maxlength="150"
+                        placeholder="Enter username or full name"
+                    >
+                </div>
+
+                <div class="user-form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        required
+                        maxlength="150"
+                        placeholder="Enter email address"
+                    >
+                </div>
+
+                <div class="user-form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        minlength="6"
+                        placeholder="Enter password"
+                    >
+                    <small class="password-note" id="passwordNote">
+                        Required when creating a new account.
+                    </small>
+                </div>
+
+                <div class="user-form-group">
+                    <label for="role">Role</label>
+                    <select id="role" required>
+                        <option value="Admin">Admin</option>
+                        <option value="Teacher">Teacher</option>
+                        <option value="Student">Student</option>
+                    </select>
+                </div>
+
+                <div class="user-form-group">
+                    <label for="accountStatus">Account Status</label>
+                    <select id="accountStatus" required>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <p id="formMessage" class="users-message error"></p>
+
+                <div class="modal-actions">
+                    <button type="button" class="users-btn" id="cancelUserBtn">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="users-btn primary" id="saveUserBtn">
+                        Save User
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/user.js" defer></script>
+</body>
+</html>

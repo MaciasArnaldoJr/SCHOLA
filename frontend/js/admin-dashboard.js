@@ -1,14 +1,4 @@
-
-// ============================================
-// SCHOLA - ADMIN DASHBOARD
-// ============================================
-
-// Backend API URL
 const API_URL = 'http://localhost:3000/api';
-
-// ============================================
-// PAGE ELEMENTS
-// ============================================
 
 const pageContent = document.getElementById('pageContent');
 const pageTitle = document.getElementById('pageTitle');
@@ -25,11 +15,6 @@ const totalEnrollments = document.getElementById('totalEnrollments');
 
 const recentActivity = document.getElementById('recentActivity');
 
-// ============================================
-// MODULE PAGE LOCATIONS
-// All HTML files are inside the pages folder.
-// ============================================
-
 const modulePages = {
     courses: 'course.html',
     departments: 'department.html',
@@ -41,10 +26,6 @@ const modulePages = {
     users: 'user.html'
 };
 
-// ============================================
-// API HELPER
-// ============================================
-
 async function fetchAPI(endpoint) {
     const response = await fetch(`${API_URL}${endpoint}`);
 
@@ -55,7 +36,6 @@ async function fetchAPI(endpoint) {
     return await response.json();
 }
 
-// Handles different API response formats
 function getArray(result, key) {
     if (Array.isArray(result)) {
         return result;
@@ -72,13 +52,8 @@ function getArray(result, key) {
     return [];
 }
 
-// ============================================
-// DASHBOARD STATISTICS
-// ============================================
-
 async function loadDashboardStats() {
 
-    // Display loading values
     totalCourses.textContent = '...';
     totalDepartments.textContent = '...';
     totalUsers.textContent = '...';
@@ -123,10 +98,6 @@ async function loadDashboardStats() {
     }
 }
 
-// ============================================
-// DASHBOARD MESSAGE
-// ============================================
-
 function showDashboardMessage(message) {
 
     let messageElement = document.getElementById('dashboardMessage');
@@ -148,20 +119,14 @@ function showDashboardMessage(message) {
     messageElement.textContent = message;
 }
 
-// ============================================
-// SIDEBAR NAVIGATION
-// ============================================
-
 function navigateTo(view) {
 
-    // Dashboard
     if (view === 'dashboard') {
 
         window.location.href = 'admin-dashboard.html';
         return;
     }
 
-    // Other module pages
     const page = modulePages[view];
 
     if (page) {
@@ -172,9 +137,6 @@ function navigateTo(view) {
     console.warn('Page not found:', view);
 }
 
-// ============================================
-// SIDEBAR CLICK EVENTS
-// ============================================
 
 sidebarLinks.forEach(link => {
 
@@ -191,10 +153,6 @@ sidebarLinks.forEach(link => {
     });
 
 });
-
-// ============================================
-// QUICK ACCESS CARD EVENTS
-// ============================================
 
 if (pageContent) {
 
@@ -216,10 +174,6 @@ if (pageContent) {
 
 }
 
-// ============================================
-// MOBILE SIDEBAR TOGGLE
-// ============================================
-
 if (menuToggle && sidebar) {
 
     menuToggle.addEventListener('click', function() {
@@ -230,7 +184,6 @@ if (menuToggle && sidebar) {
 
 }
 
-// Close sidebar when clicking outside on mobile
 document.addEventListener('click', function(event) {
 
     if (!sidebar || !menuToggle) {
@@ -250,17 +203,9 @@ document.addEventListener('click', function(event) {
 
 });
 
-// ============================================
-// DASHBOARD REFRESH
-// ============================================
-
 async function refreshDashboard() {
     await loadDashboardStats();
 }
-
-// ============================================
-// INITIALIZE DASHBOARD
-// ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -269,9 +214,5 @@ document.addEventListener('DOMContentLoaded', function() {
     loadDashboardStats();
 
 });
-
-// ============================================
-// MAKE REFRESH FUNCTION AVAILABLE
-// ============================================
 
 window.refreshDashboard = refreshDashboard;

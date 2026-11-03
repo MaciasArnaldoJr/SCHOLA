@@ -37,3 +37,92 @@ Automatic grade perventage evaluator and transmuter for admins
 | Lumanog, Christer John | [cejlumanog](https://github.com/cejlumanog) | Schedule, Room, LearningMaterial | `/api/schedules`, `/api/rooms`, `/api/learningmaterials` / Reports Management | Schedule + Room + LearningMaterial (INNER JOIN, LEFT JOIN) | Reports |
 
 ## How to Run
+
+### Prerequisites
+
+Make sure the following are installed on your computer:
+
+- [Node.js](https://nodejs.org/)
+- [MySQL](https://dev.mysql.com/downloads/installer/)
+- [MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
+- [Visual Studio Code](https://code.visualstudio.com/)
+
+### Step 1. Clone the Repository
+
+Open your terminal and run:
+
+```bash
+git clone https://github.com/MaciasArnaldoJr/SCHOLA.git .
+```
+
+### Step 2. Navigate to the Project Folder
+
+```bash
+cd SCHOLA
+```
+
+### Step 3. Install Dependencies
+
+Run the following command in the project root directory:
+
+```bash
+npm install
+```
+
+### Step 4. Set Up the Database
+
+1. Open MySQL Workbench.
+2. Connect to your local MySQL server.
+3. Create the SCHOLA database:
+
+```sql
+CREATE DATABASE schola;
+```
+
+4. Select the `schola` database.
+5. Import and execute the SQL files in this order:
+
+   - `database/tables.sql`
+   - `database/sample-data.sql`
+
+### Step 5. Configure Environment Variables
+
+Create a `.env` file in the root project directory and add:
+
+```env
+PORT=3000
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_mysql_password
+DB_NAME=schola
+```
+
+Replace `your_mysql_password` with your actual MySQL password. If your MySQL account has no password, leave `DB_PASSWORD` empty.
+
+### Step 6. Start MySQL
+
+Make sure your local MySQL server is running.
+
+### Step 7. Start the Application
+
+In the project root directory, run:
+
+```bash
+npm start
+```
+
+Wait for the backend server to start successfully.
+
+### Step 8. Open SCHOLA
+
+Open your browser and visit:
+
+http://localhost:3000/pages/admin-dashboard.html
+
+### Stop the Application
+
+To stop the server, return to the terminal and press:
+
+```text
+Ctrl + C
+```

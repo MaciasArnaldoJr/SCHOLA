@@ -23,7 +23,7 @@ Schola is a recording system that helps admins monitor their students and staff.
 
 ## Unique Major Feature
 
-
+Automatic grade perventage evaluator and transmuter for admins
 
 ## Ownership Matrix
 

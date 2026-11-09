@@ -1,0 +1,238 @@
+
+:root {
+    --gold: #2563eb;
+    --gold-light: #93c5fd;
+    --ink: #101114;
+    --muted: #858585;
+    --line: #e8e8e8;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Inter, Arial, sans-serif;
+    background: #f5f5f3;
+    color: var(--ink);
+}
+
+.login-layout {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.brand-panel {
+    background: radial-gradient(circle at 20% 15%, #263b63 0, #172640 38%, #0d1424 100%);
+    color: white;
+    padding: 10vh 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.brand-panel::after {
+    content: "";
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    border: 1px solid #ffffff12;
+    border-radius: 50%;
+    right: -180px;
+    bottom: -180px;
+    box-shadow: 0 0 0 45px #ffffff08, 0 0 0 90px #ffffff05;
+}
+
+.brand-mark {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--gold-light), #1e40af);
+    font-size: 30px;
+    font-weight: 900;
+    margin-bottom: 55px;
+}
+
+.eyebrow {
+    color: #60a5fa;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.brand-panel .eyebrow {
+    color: var(--gold-light);
+}
+
+.brand-panel h1 {
+    font-size: clamp(48px, 7vw, 82px);
+    letter-spacing: 8px;
+    margin: 12px 0;
+}
+
+.brand-description {
+    max-width: 390px;
+    color: #b9c7dc;
+    line-height: 1.8;
+    font-size: 15px;
+}
+
+.brand-line {
+    width: 58px;
+    height: 3px;
+    background: var(--gold);
+    margin-top: 42px;
+}
+
+.brand-footer {
+    color: #8293ad;
+    letter-spacing: 3px;
+    font-size: 10px;
+    margin-top: 18px;
+}
+
+.form-panel {
+    display: grid;
+    place-items: center;
+    padding: 36px;
+}
+
+.login-card {
+    width: min(100%, 420px);
+}
+
+.login-card h2 {
+    font-size: 34px;
+    margin: 13px 0 8px;
+    letter-spacing: -1px;
+}
+
+.subheading {
+    color: var(--muted);
+    margin: 0 0 38px;
+    font-size: 14px;
+}
+
+.login-card label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 20px 0 9px;
+}
+
+.login-card input {
+    width: 100%;
+    height: 50px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0 14px;
+    background: white;
+    font-size: 13px;
+    outline: none;
+}
+
+.login-card input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px #2563eb22;
+}
+
+.password-wrap {
+    position: relative;
+}
+
+.password-wrap input {
+    padding-right: 66px;
+}
+
+.show-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    background: none;
+    color: #1e40af;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.message {
+    min-height: 20px;
+    margin: 14px 0 8px;
+    color: #b42318;
+    font-size: 12px;
+}
+
+.submit-button {
+    width: 100%;
+    height: 51px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--gold);
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.submit-button:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.submit-button:disabled {
+    opacity: .65;
+    cursor: wait;
+    transform: none;
+}
+
+.security-note {
+    text-align: center;
+    color: #999;
+    font-size: 11px;
+    margin-top: 24px;
+}
+
+@media (max-width: 760px) {
+    .login-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .brand-panel {
+        min-height: 270px;
+        padding: 38px 9%;
+    }
+
+    .brand-mark {
+        margin-bottom: 22px;
+        width: 45px;
+        height: 45px;
+        font-size: 23px;
+    }
+
+    .brand-panel h1 {
+        font-size: 48px;
+    }
+
+    .brand-description {
+        margin-bottom: 0;
+    }
+
+    .brand-line,
+    .brand-footer {
+        display: none;
+    }
+
+    .form-panel {
+        padding: 48px 9%;
+    }
+}

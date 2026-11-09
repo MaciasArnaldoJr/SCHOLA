@@ -36,58 +36,64 @@ Automatic grade perventage evaluator and transmuter for admins
 | Malusay, Mark | [Mark-ux-collab](https://github.com/Mark-ux-collab) | Grade, Attendance | `/api/grades`, `/api/attendance` / Grade Management | Grade + Attendance (INNER JOIN) | Unique Feature (Workflows/Audits) |
 | Lumanog, Christer John | [cejlumanog](https://github.com/cejlumanog) | Schedule, Room, LearningMaterial | `/api/schedules`, `/api/rooms`, `/api/learningmaterials` / Reports Management | Schedule + Room + LearningMaterial (INNER JOIN, LEFT JOIN) | Reports |
 
-## How to Run
+
+## How to Run SCHOLA
+
+Follow these steps to set up and run SCHOLA on your computer.
 
 ### Prerequisites
 
 Make sure the following are installed on your computer:
 
 - [Node.js](https://nodejs.org/)
+- [Git](https://git-scm.com/)
 - [MySQL](https://dev.mysql.com/downloads/installer/)
 - [MySQL Workbench](https://dev.mysql.com/downloads/workbench/)
 - [Visual Studio Code](https://code.visualstudio.com/)
 
-### Step 1. Clone the Repository
+### Step 1. Create a Project Folder
 
-Open your terminal and run:
+Create a folder where you want to store the SCHOLA project.
+
+Open the folder in CMD (Command Prompt).
+
+### Step 2. Clone the Repository
+
+Run the following command:
 
 ```bash
 git clone https://github.com/MaciasArnaldoJr/SCHOLA.git .
 ```
 
-### Step 2. Navigate to the Project Folder
-
-```bash
-cd SCHOLA
-```
-
 ### Step 3. Install Dependencies
 
-Run the following command in the project root directory:
+Inside the project directory, run:
 
 ```bash
 npm install
 ```
 
-### Step 4. Set Up the Database
+This installs all the required Node.js packages.
 
-1. Open MySQL Workbench.
-2. Connect to your local MySQL server.
-3. Create the SCHOLA database:
+### Step 4. Open the Project in VS Code
 
-```sql
-CREATE DATABASE schola;
+Run:
+
+```bash
+code .
 ```
 
-4. Select the `schola` database.
-5. Import and execute the SQL files in this order:
+This opens the SCHOLA project in Visual Studio Code.
 
-   - `database/tables.sql`
-   - `database/sample-data.sql`
+### Step 5. Configure the Environment Variables
 
-### Step 5. Configure Environment Variables
+Locate the `.env.example` file in the project root directory.
 
-Create a `.env` file in the root project directory and add:
+Create a copy of the file and rename the copied file to `.env`.
+
+Open `.env` and enter your local MySQL credentials.
+
+Example:
 
 ```env
 PORT=3000
@@ -97,32 +103,60 @@ DB_PASSWORD=your_mysql_password
 DB_NAME=schola
 ```
 
-Replace `your_mysql_password` with your actual MySQL password. If your MySQL account has no password, leave `DB_PASSWORD` empty.
+Replace `your_mysql_password` with your actual MySQL root password. If your MySQL account has no password, leave `DB_PASSWORD` empty.
+
+**Important:** Do not rename or modify `.env.example`. Only edit your personal `.env` file.
 
 ### Step 6. Start MySQL
 
-Make sure your local MySQL server is running.
+Make sure your local MySQL server is running before starting SCHOLA.
 
-### Step 7. Start the Application
+The application will automatically initialize the required database and tables when the backend starts.
 
-In the project root directory, run:
+No manual database creation through MySQL Workbench is required.
+
+### Step 7. Start the Backend Server
+
+In VS Code, navigate to:
+
+`backend/server.js`
+
+Open the integrated terminal and run:
 
 ```bash
-npm start
+node backend/server.js
 ```
 
 Wait for the backend server to start successfully.
 
+**Keep the terminal running** while using SCHOLA.
+
 ### Step 8. Open SCHOLA
 
-Open your browser and visit:
+Open your preferred web browser (Google Chrome, Microsoft Edge, or Firefox).
 
-http://localhost:3000/pages/admin-dashboard.html
+Enter the following address in the browser:
 
-### Stop the Application
+```text
+http://localhost:3000/pages/login.html
+```
 
-To stop the server, return to the terminal and press:
+Press Enter to access the SCHOLA Login Page.
+
+Make sure the backend server is still running while accessing the application.
+
+### Stopping the Application
+
+To stop the backend server, return to the terminal and press:
 
 ```text
 Ctrl + C
 ```
+
+### Important Notes
+
+- Each computer must have its own Node.js dependencies and local MySQL server.
+- Each user must configure their own `.env` file using their local MySQL credentials.
+- The `.env` file is not included in the repository because it contains database credentials.
+- Make sure MySQL is running before starting the backend server.
+- Keep the backend terminal running while accessing SCHOLA.

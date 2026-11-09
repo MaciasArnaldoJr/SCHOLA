@@ -29,7 +29,7 @@ Automatic grade perventage evaluator and transmuter for admins
 
 | Member | GitHub Username | Tables | Endpoints / Screens | Join Report(s) and Join Type | Feature Role |
 |---|---|---|---|---|---|
-| Macias, Arnaldo Jr. | [MaciasArnaldoJr](https://github.com/MaciasArnaldoJr) | Users, Students, Teachers | `/api/users`, `/api/students`, `/api/teachers` / User Management | Users + Students + Teachers (LEFT JOIN) | Core |
+| Macias, Arnaldo Jr. | [MaciasArnaldoJr](https://github.com/MaciasArnaldoJr) | Users, Students, Teachers | `/api/users`, `/api/students`, `/api/teachers` / Login Page, User Management | Users + Students + Teachers (LEFT JOIN) | Core |
 | Marino, Jhon Cristopher | [marinojhoncristopher7](https://github.com/marinojhoncristopher7) | Course, Department, YearLevel | `/api/courses`, `/api/departments`, `/api/yearlevels` / Admin Dashboard, Course Management, Department Management | Course + Department + YearLevel (INNER JOIN) | Master Data |
 | Labadia, Trisha Babie | [Babie25](https://github.com/Babie25) | Subjects, Semester, Loadslip | `/api/subjects`, `/api/semesters`, `/api/loadslips` / Enrollment Management, Loadslip Management| Loadslip + Subjects + Semester (INNER JOIN) | Transactions |
 | Malunes, Shanon Cline | [shanclinemalunes](https://github.com/shanclinemalunes) | Activities, Scores | `/api/activities`, `/api/scores` / Evaluation Management | Activities + Scores (INNER JOIN) | Unique Feature (Rules) |

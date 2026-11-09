@@ -18,6 +18,7 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
+const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const studentRoutes = require('./routes/studentRoutes');
 const teacherRoutes = require('./routes/teacherRoutes');
@@ -35,6 +36,7 @@ const scheduleRoutes = require('./routes/scheduleRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const learningMaterialRoutes = require('./routes/learningMaterialRoutes');
 
+app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/students', studentRoutes);
 app.use('/api/teachers', teacherRoutes);

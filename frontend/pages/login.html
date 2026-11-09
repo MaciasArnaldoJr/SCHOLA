@@ -1,0 +1,43 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCHOLA | Administrator Login</title>
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+    <main class="login-layout">
+        <section class="brand-panel">
+            <div class="brand-mark">S</div>
+            <p class="eyebrow">SCHOOL MANAGEMENT SYSTEM</p>
+            <h1>SCHOLA</h1>
+            <p class="brand-description">A central space for managing academic records and school information.</p>
+            <div class="brand-line"></div>
+            <p class="brand-footer">LEARN. MANAGE. EXCEL.</p>
+        </section>
+
+        <section class="form-panel">
+            <form class="login-card" id="loginForm">
+                <p class="eyebrow">ADMINISTRATOR ACCESS</p>
+                <h2>Welcome back.</h2>
+                <p class="subheading">Sign in using your administrator account.</p>
+
+                <label for="login">Username or email</label>
+                <input id="login" name="login" type="text" autocomplete="username" placeholder="Enter your username or email" required="">
+
+                <label for="password">Password</label>
+                <div class="password-wrap">
+                    <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required="">
+                    <button class="show-password" type="button" id="togglePassword">Show</button>
+                </div>
+
+                <p class="message" id="loginMessage" role="alert" aria-live="polite"></p>
+                <button class="submit-button" id="submitButton" type="submit">Sign in</button>
+                <p class="security-note">Administrator accounts only</p>
+            </form>
+        </section>
+    </main>
+    <script src="../js/config.js"></script>
+    <script src="../js/login.js"></script>
+
+
+</body></html>

@@ -215,4 +215,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+
+    const logoutButton = document.getElementById('logoutButton');
+
+    if (!logoutButton) {
+        console.error('SCHOLA: Logout button not found.');
+        return;
+    }
+
+    logoutButton.addEventListener('click', function (event) {
+
+        event.preventDefault();
+
+        localStorage.removeItem('scholaAdmin');
+        
+        window.location.replace(
+            new URL('./login.html', window.location.href).href
+        );
+
+    });
+
+    console.log('SCHOLA: Logout button connected.');
+
+});
+
+
 window.refreshDashboard = refreshDashboard;

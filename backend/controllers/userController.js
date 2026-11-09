@@ -65,7 +65,6 @@ exports.getAllUsers = (req, res) => {
             });
         }
 
-        // Return users as a direct JSON array
         return res.status(200).json(results);
     });
 };
@@ -137,7 +136,6 @@ exports.updateUser = (req, res) => {
             });
         }
 
-        // If password is empty, keep the existing password
         if (!password) {
             return res.status(200).json({
                 message: 'User updated successfully.'
